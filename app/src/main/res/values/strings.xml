@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ComposeTemplate</string>
+    <!-- 앱네임은 properties로 뺄 수가 없네 (ISO-8859-1)-->
+    <string name="app_name">템플릿</string>
 </resources>
