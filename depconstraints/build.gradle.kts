@@ -27,6 +27,7 @@ dependencies {
         api("${Libs.HILT_ANDROID}:$hilt")
         api("${Libs.HILT_COMPILER}:$hilt")
         api("${Libs.LIFECYCLE_RUNTIME_KTX}:$lifecycle")
+        api("${Libs.LIFECYCLE_VIEW_MODEL_COMPOSE}:$lifecycle")
         api("${Libs.NAVIGATION_COMPOSE}:$navigation")
         api("${Libs.OKHTTP_LOGGING_INTERCEPTOR}:$okhttp")
         api("${Libs.RETROFIT}:$retrofit")

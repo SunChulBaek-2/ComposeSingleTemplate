@@ -10,6 +10,7 @@ object Libs {
     const val HILT_ANDROID = "com.google.dagger:hilt-android"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler"
     const val LIFECYCLE_RUNTIME_KTX = "androidx.lifecycle:lifecycle-runtime-ktx"
+    const val LIFECYCLE_VIEW_MODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose"
     const val NAVIGATION_COMPOSE = "androidx.navigation:navigation-compose"
     const val OKHTTP_LOGGING_INTERCEPTOR = "com.squareup.okhttp3:logging-interceptor"
     const val RETROFIT = "com.squareup.retrofit2:retrofit"

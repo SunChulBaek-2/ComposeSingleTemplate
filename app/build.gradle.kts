@@ -64,6 +64,7 @@ dependencies {
     implementation(Libs.COMPOSE_UI_TOOLING_PREVIEW)
     implementation(Libs.ACTIVITY_COMPOSE)
     implementation(Libs.NAVIGATION_COMPOSE)
+    implementation(Libs.LIFECYCLE_VIEW_MODEL_COMPOSE)
     debugImplementation(Libs.COMPOSE_UI_TOOLING)
 
     // Android Architecture Components

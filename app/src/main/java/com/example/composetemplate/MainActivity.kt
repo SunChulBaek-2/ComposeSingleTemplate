@@ -20,10 +20,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.composetemplate.ui.Tab1Screen
-import com.example.composetemplate.ui.Tab2Screen
-import com.example.composetemplate.ui.Tab3Screen
-import com.example.composetemplate.ui.Tab4Screen
+import com.example.composetemplate.ui.tab1.Tab1Screen
+import com.example.composetemplate.ui.tab2.Tab2Screen
+import com.example.composetemplate.ui.tab3.Tab3Screen
+import com.example.composetemplate.ui.tab4.Tab4Screen
 import com.example.composetemplate.ui.theme.ComposeTemplateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
