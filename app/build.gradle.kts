@@ -5,14 +5,15 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    val buildProp = file(rootProject.file("build.properties"))
+    compileSdk = Versions.getProperty(buildProp, "compileSdk").toInt()
 
     defaultConfig {
-        applicationId ="com.example.composetemplate"
-        minSdk = 21
-        targetSdk = 32
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Versions.getProperty(buildProp, "applicationId")
+        minSdk = Versions.getProperty(buildProp, "minSdk").toInt()
+        targetSdk = Versions.getProperty(buildProp, "targetSdk").toInt()
+        versionCode = Versions.getProperty(buildProp, "versionCode").toInt()
+        versionName = Versions.getProperty(buildProp, "versionName")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
