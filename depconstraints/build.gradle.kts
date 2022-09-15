@@ -21,6 +21,7 @@ dependencies {
         api("${Libs.COMPOSE_MATERIAL}:$compose")
         api("${Libs.COMPOSE_UI}:$compose")
         api("${Libs.COMPOSE_UI_TOOLING}:$compose")
+        api("${Libs.COMPOSE_UI_TOOLING_PREVIEW}:$compose")
         api("${Libs.CORE_KTX}:$coreKtx")
         api("${Libs.HILT_ANDROID}:$hilt")
         api("${Libs.HILT_COMPILER}:$hilt")
