@@ -1,4 +1,4 @@
-package com.example.composetemplate.ui.tab4
+package com.example.composetemplate.ui.home.tab3
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,18 +8,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-data class Tab4UiState(
+data class Tab3UiState(
     val text: String
 )
 
 @HiltViewModel
-class Tab4ViewModel @Inject constructor() : ViewModel() {
+class Tab3ViewModel @Inject constructor() : ViewModel() {
 
-    var uiState by mutableStateOf(Tab4UiState(""))
+    var uiState by mutableStateOf(Tab3UiState(""))
         private set
 
     fun init() {
         Timber.d("init()")
-        uiState = Tab4UiState("Tab4")
+        uiState = Tab3UiState("Tab3")
     }
 }

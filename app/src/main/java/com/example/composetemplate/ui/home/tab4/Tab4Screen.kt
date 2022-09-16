@@ -1,4 +1,4 @@
-package com.example.composetemplate.ui.tab4
+package com.example.composetemplate.ui.home.tab4
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

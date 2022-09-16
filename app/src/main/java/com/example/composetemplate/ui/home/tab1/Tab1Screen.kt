@@ -1,4 +1,4 @@
-package com.example.composetemplate.ui.tab2
+package com.example.composetemplate.ui.home.tab1
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun Tab2Screen(
-    viewModel: Tab2ViewModel = viewModel()
+fun Tab1Screen(
+    viewModel: Tab1ViewModel = viewModel()
 ) {
     LaunchedEffect(true) {
         viewModel.init()
@@ -22,7 +22,7 @@ fun Tab2Screen(
     val uiState = viewModel.uiState
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(Color.Yellow.copy(0.3f))) {
+        .background(Color.Red.copy(0.3f))) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = uiState.text
