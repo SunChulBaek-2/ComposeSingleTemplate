@@ -52,7 +52,7 @@ fun MainNavHost(
             }
         }
         composable("home") {
-            HomeScreen(showToast, onBack)
+            HomeScreen(showToast = showToast, onBack = onBack)
         }
     }
 }

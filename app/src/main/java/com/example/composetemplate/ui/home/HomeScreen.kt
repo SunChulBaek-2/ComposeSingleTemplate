@@ -4,13 +4,14 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,18 +25,19 @@ import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen
-import timber.log.Timber
+import com.example.composetemplate.ui.widget.DefaultSnackbar
+import kotlinx.coroutines.launch
 
 sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
     @StringRes val resourceId: Int,
-    val content: (@Composable ()->Unit)
+    val content: (@Composable ((String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { Tab1Screen() })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { Tab2Screen() })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { Tab3Screen() })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { Tab4Screen() })
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { Tab1Screen(showSnackbar = it) })
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { Tab2Screen(showSnackbar = it) })
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { Tab3Screen(showSnackbar = it) })
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { Tab4Screen(showSnackbar = it) })
 }
 
 val items = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
@@ -45,7 +47,10 @@ var backKeyPressedTime: Long = 0
 var toast: Toast? = null
 
 @Composable
-fun HomeScreen(showToast: (String) -> Toast, onBack: () -> Unit) {
+fun HomeScreen(
+    showToast: (String) -> Toast,
+    onBack: () -> Unit
+) {
     val navController = rememberNavController()
     BackHandler {
         if (!navController.popBackStack()) {
@@ -60,14 +65,21 @@ fun HomeScreen(showToast: (String) -> Toast, onBack: () -> Unit) {
             }
         }
     }
+
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { TopAppBar(
-            title = { Text(stringResource(R.string.app_name)) },
-            navigationIcon = { IconButton(onClick = { }) {
-                Icon(Icons.Default.Menu, "Menu")
-            } }
-        ) },
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                navigationIcon = {
+                    IconButton(onClick = { }) {
+                        Icon(Icons.Default.Menu, "Menu")
+                    }
+                }
+            )
+        },
         bottomBar = {
             BottomNavigation {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -89,10 +101,27 @@ fun HomeScreen(showToast: (String) -> Toast, onBack: () -> Unit) {
             }
         }
     ) { innerPadding ->
-        NavHost(navController = navController, startDestination = Screen.Tab1.route, Modifier.padding(innerPadding)) {
-            items.forEach { screen ->
-                composable(screen.route) { screen.content.invoke() }
+        Box(modifier = Modifier.padding(innerPadding)) {
+            NavHost(
+                navController = navController,
+                startDestination = Screen.Tab1.route
+            ) {
+                items.forEach { screen ->
+                    composable(screen.route) {
+                        screen.content.invoke { text ->
+                            scope.launch {
+                                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                                scaffoldState.snackbarHostState.showSnackbar(message = text)
+                            }
+                        }
+                    }
+                }
             }
+            DefaultSnackbar(
+                snackbarHostState = scaffoldState.snackbarHostState,
+                onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }

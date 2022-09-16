@@ -19,7 +19,7 @@ class Tab2ViewModel @Inject constructor() : ViewModel() {
         private set
 
     fun init() {
-        Timber.d("init()")
+        Timber.d("Tab2ViewModel.init()")
         uiState = Tab2UiState("Tab2")
     }
 }

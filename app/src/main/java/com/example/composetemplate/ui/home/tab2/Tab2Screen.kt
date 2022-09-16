@@ -3,6 +3,7 @@ package com.example.composetemplate.ui.home.tab2
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +14,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Tab2Screen(
-    viewModel: Tab2ViewModel = viewModel()
+    viewModel: Tab2ViewModel = viewModel(),
+    showSnackbar: (String) -> Unit
 ) {
     LaunchedEffect(true) {
         viewModel.init()
@@ -23,9 +25,11 @@ fun Tab2Screen(
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.Yellow.copy(0.3f))) {
-        Text(
+        Button(
             modifier = Modifier.align(Alignment.Center),
-            text = uiState.text
-        )
+            onClick = { showSnackbar("탭2 클릭") }
+        ) {
+            Text(uiState.text)
+        }
     }
 }
