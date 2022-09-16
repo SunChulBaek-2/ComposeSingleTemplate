@@ -45,7 +45,7 @@ fun SplashScreen(
             modifier = Modifier.align(Alignment.Center),
             text = uiState.stringId?.let { stringResource(uiState.stringId) } ?: "",
             color = contentColor,
-            fontSize = 40.sp
+            style = MaterialTheme.typography.h2
         )
     }
 }
