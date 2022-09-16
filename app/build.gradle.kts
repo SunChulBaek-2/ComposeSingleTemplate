@@ -20,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "baseUrl", "\"https://jsonplaceholder.typicode.com\"")
     }
 
     buildTypes {
@@ -85,4 +87,5 @@ dependencies {
     // Hilt
     implementation(Libs.HILT_ANDROID)
     kapt(Libs.HILT_COMPILER)
+    implementation(Libs.HILT_NAVIGATION)
 }

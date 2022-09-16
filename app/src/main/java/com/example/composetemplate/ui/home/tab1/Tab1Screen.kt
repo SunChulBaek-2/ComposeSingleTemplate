@@ -10,11 +10,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun Tab1Screen(
-    viewModel: Tab1ViewModel = viewModel(),
+    viewModel: Tab1ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit
 ) {
     LaunchedEffect(true) {

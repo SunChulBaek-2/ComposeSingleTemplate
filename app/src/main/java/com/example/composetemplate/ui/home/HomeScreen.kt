@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.composetemplate.R
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
+import com.example.composetemplate.ui.home.tab1.Tab1ViewModel
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen

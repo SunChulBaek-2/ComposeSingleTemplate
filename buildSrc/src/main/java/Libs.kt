@@ -9,6 +9,7 @@ object Libs {
     const val CORE_KTX = "androidx.core:core-ktx"
     const val HILT_ANDROID = "com.google.dagger:hilt-android"
     const val HILT_COMPILER = "com.google.dagger:hilt-android-compiler"
+    const val HILT_NAVIGATION = "androidx.hilt:hilt-navigation-compose"
     const val LIFECYCLE_RUNTIME_KTX = "androidx.lifecycle:lifecycle-runtime-ktx"
     const val LIFECYCLE_VIEW_MODEL_COMPOSE = "androidx.lifecycle:lifecycle-viewmodel-compose"
     const val NAVIGATION_COMPOSE = "androidx.navigation:navigation-compose"

@@ -8,6 +8,7 @@ val coil = "2.2.1"
 val compose = Versions.COMPOSE
 val coreKtx = "1.8.0"
 val hilt = Versions.HILT_AGP
+val hiltNavigation = "1.0.0"
 val lifecycle = "2.5.1"
 val navigation = "2.5.2"
 val okhttp = "4.10.0"
@@ -26,6 +27,7 @@ dependencies {
         api("${Libs.CORE_KTX}:$coreKtx")
         api("${Libs.HILT_ANDROID}:$hilt")
         api("${Libs.HILT_COMPILER}:$hilt")
+        api("${Libs.HILT_NAVIGATION}:$hiltNavigation")
         api("${Libs.LIFECYCLE_RUNTIME_KTX}:$lifecycle")
         api("${Libs.LIFECYCLE_VIEW_MODEL_COMPOSE}:$lifecycle")
         api("${Libs.NAVIGATION_COMPOSE}:$navigation")
