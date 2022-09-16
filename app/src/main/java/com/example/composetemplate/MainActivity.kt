@@ -3,16 +3,17 @@ package com.example.composetemplate
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -39,11 +40,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int, val content: (@Composable ()->Unit)) {
-    object Tab1 : Screen("tab1", R.string.tab1, { Tab1Screen() })
-    object Tab2 : Screen("tab2", R.string.tab2, { Tab2Screen() })
-    object Tab3 : Screen("tab3", R.string.tab3, { Tab3Screen() })
-    object Tab4 : Screen("tab4", R.string.tab4, { Tab4Screen() })
+sealed class Screen(@DrawableRes val icon: Int, val route: String, @StringRes val resourceId: Int, val content: (@Composable ()->Unit)) {
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { Tab1Screen() })
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { Tab2Screen() })
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { Tab3Screen() })
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { Tab4Screen() })
 }
 
 val items = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
@@ -65,7 +66,7 @@ fun HomeScreen() {
                 val currentDestination = navBackStackEntry?.destination
                 items.forEach { screen ->
                     BottomNavigationItem(
-                        icon = { Icon(Icons.Filled.Favorite, null) },
+                        icon = { Icon(painterResource(screen.icon), null) },
                         label = { Text(stringResource(screen.resourceId)) },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
