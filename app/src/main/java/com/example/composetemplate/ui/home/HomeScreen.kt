@@ -1,4 +1,4 @@
-package com.example.composetemplate.ui
+package com.example.composetemplate.ui.home
 
 import android.util.Base64
 import android.widget.Toast
@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composetemplate.ui.detail.PhotoDetailScreen
-import com.example.composetemplate.ui.home.NestedHomeScreen
 
 // 홈화면과 상세화면에 대한 네비게이션 처리
 @Composable
