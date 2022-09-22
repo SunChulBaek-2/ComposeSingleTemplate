@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.composetemplate.ui.home.HomeScreen
+import com.example.composetemplate.ui.HomeScreen
 import com.example.composetemplate.ui.splash.SplashScreen
 import com.example.composetemplate.ui.theme.ComposeTemplateTheme
 import dagger.hilt.android.AndroidEntryPoint
