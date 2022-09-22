@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.composetemplate.R
+import com.example.composetemplate.ui.detail.PhotoDetailScreen
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab1.Tab1ViewModel
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
@@ -34,15 +35,29 @@ sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
     @StringRes val resourceId: Int,
-    val content: (@Composable ((String) -> Unit) -> Unit)
+    val content: (@Composable ((String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { Tab1Screen(showSnackbar = it) })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { Tab2Screen(showSnackbar = it) })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { Tab3Screen(showSnackbar = it) })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { Tab4Screen(showSnackbar = it) })
+    // 하단바
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { showSnackbar, navigate ->
+        Tab1Screen(showSnackbar = showSnackbar, navigate = navigate)
+    })
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { showSnackbar, navigate ->
+        Tab2Screen(showSnackbar = showSnackbar)
+    })
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { showSnackbar, navigate ->
+        Tab3Screen(showSnackbar = showSnackbar)
+    })
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { showSnackbar, navigate ->
+        Tab4Screen(showSnackbar = showSnackbar)
+    })
+    // 2-Depth
+    object PhotoDetail : Screen(R.drawable.ic_launcher_foreground, "photo", R.string.app_name, { _, _->
+        PhotoDetailScreen()
+    })
 }
 
-val items = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
+val tabs = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
+val items = tabs.plus(listOf(Screen.PhotoDetail))
 
 const val BACK_PRESS_DELAY_TIME: Long = 2000
 var backKeyPressedTime: Long = 0
@@ -86,7 +101,7 @@ fun HomeScreen(
             BottomNavigation {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
-                items.forEach { screen ->
+                tabs.forEach { screen ->
                     BottomNavigationItem(
                         icon = { Icon(painterResource(screen.icon), null) },
                         label = { Text(stringResource(screen.resourceId)) },
@@ -110,12 +125,17 @@ fun HomeScreen(
             ) {
                 items.forEach { screen ->
                     composable(screen.route) {
-                        screen.content.invoke { text ->
+                        // showSnackbar
+                        screen.content.invoke({ text ->
                             scope.launch {
                                 scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                                 scaffoldState.snackbarHostState.showSnackbar(message = text)
                             }
-                        }
+                        },
+                        // navigate
+                        { route ->
+                            navController.navigate(route)
+                        })
                     }
                 }
             }

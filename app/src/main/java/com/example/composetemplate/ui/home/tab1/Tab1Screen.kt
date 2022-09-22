@@ -1,22 +1,24 @@
 package com.example.composetemplate.ui.home.tab1
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.SubcomposeAsyncImage
+import com.example.composetemplate.data.Photo
+import com.example.composetemplate.ui.common.Loading
 
 @Composable
 fun Tab1Screen(
     viewModel: Tab1ViewModel = hiltViewModel(),
-    showSnackbar: (String) -> Unit
+    showSnackbar: (String) -> Unit,
+    navigate: (String) -> Unit
 ) {
     LaunchedEffect(true) {
         viewModel.init()
@@ -26,13 +28,54 @@ fun Tab1Screen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Red.copy(0.3f))
+            .background(MaterialTheme.colors.background)
     ) {
-        Button(
-            modifier = Modifier.align(Alignment.Center),
-            onClick = { showSnackbar("탭1 클릭") }
-        ) {
-            Text(uiState.text)
+        if (uiState.isLoading) {
+            Loading()
+        } else {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(
+                    count = uiState.photos.size,
+                    key = { index -> uiState.photos[index].id },
+                    itemContent = { index ->
+                        photoItem(uiState.photos[index]) {
+                            showSnackbar("$index 번 째 아이템 클릭")
+                            navigate("photo")
+                        }
+                    }
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun photoItem(item: Photo, onClick: () -> Unit) {
+    val backgroundColor = MaterialTheme.colors.background
+    val contentColor = contentColorFor(backgroundColor)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(backgroundColor)
+            .clickable {
+                onClick.invoke()
+            },
+    ) {
+        SubcomposeAsyncImage(
+            modifier = Modifier.size(100.dp),
+            model = item.thumbnailUrl,
+            loading = {
+                CircularProgressIndicator(modifier = Modifier.padding(25.dp))
+            },
+            contentDescription = "thumbnail"
+        )
+        Text(
+            modifier = Modifier
+                .padding(start = 100.dp)
+                .padding(10.dp),
+            text = item.title,
+            color = contentColor
+        )
     }
 }

@@ -8,4 +8,5 @@ class FakeRepository @Inject constructor(
     private val apiService: ApiService
 ) {
 
+    suspend fun getPhotos(): List<Photo> = apiService.getPhotos()
 }

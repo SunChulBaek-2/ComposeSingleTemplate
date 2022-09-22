@@ -21,7 +21,7 @@ android {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "baseUrl", "\"https://jsonplaceholder.typicode.com\"")
+        buildConfigField("String", "baseUrl", "\"${Versions.getProperty(buildProp, "baseUrl")}\"")
     }
 
     buildTypes {

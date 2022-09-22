@@ -20,6 +20,6 @@ class Tab3ViewModel @Inject constructor() : ViewModel() {
 
     fun init() {
         Timber.d("Tab3ViewModel.init()")
-        uiState = Tab3UiState("Tab3")
+        uiState = Tab3UiState("Tab3Screen()")
     }
 }
