@@ -1,5 +1,6 @@
 package com.example.composetemplate.ui.home
 
+import android.util.Base64
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
@@ -15,16 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.composetemplate.R
 import com.example.composetemplate.ui.detail.PhotoDetailScreen
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
-import com.example.composetemplate.ui.home.tab1.Tab1ViewModel
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen
@@ -37,7 +38,6 @@ sealed class Screen(
     @StringRes val resourceId: Int,
     val content: (@Composable ((String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    // 하단바
     object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { showSnackbar, navigate ->
         Tab1Screen(showSnackbar = showSnackbar, navigate = navigate)
     })
@@ -50,14 +50,9 @@ sealed class Screen(
     object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { showSnackbar, navigate ->
         Tab4Screen(showSnackbar = showSnackbar)
     })
-    // 2-Depth
-    object PhotoDetail : Screen(R.drawable.ic_launcher_foreground, "photo", R.string.app_name, { _, _->
-        PhotoDetailScreen()
-    })
 }
 
 val tabs = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
-val items = tabs.plus(listOf(Screen.PhotoDetail))
 
 const val BACK_PRESS_DELAY_TIME: Long = 2000
 var backKeyPressedTime: Long = 0
@@ -69,6 +64,7 @@ fun HomeScreen(
     onBack: () -> Unit
 ) {
     val navController = rememberNavController()
+    val showTopBottomBar = navController.currentBackStackEntryAsState().value?.destination?.route in tabs.map { it.route}
     BackHandler {
         if (!navController.popBackStack()) {
             if (System.currentTimeMillis() > backKeyPressedTime + BACK_PRESS_DELAY_TIME) {
@@ -88,32 +84,36 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(Icons.Default.Menu, "Menu")
+            if (showTopBottomBar) {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.app_name)) },
+                    navigationIcon = {
+                        IconButton(onClick = { }) {
+                            Icon(Icons.Default.Menu, "Menu")
+                        }
                     }
-                }
-            )
+                )
+            }
         },
         bottomBar = {
-            BottomNavigation {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                tabs.forEach { screen ->
-                    BottomNavigationItem(
-                        icon = { Icon(painterResource(screen.icon), null) },
-                        label = { Text(stringResource(screen.resourceId)) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                popUpTo(0)
-                                launchSingleTop = true
-                                restoreState = true
+            if (showTopBottomBar) {
+                BottomNavigation {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    tabs.forEach { screen ->
+                        BottomNavigationItem(
+                            icon = { Icon(painterResource(screen.icon), null) },
+                            label = { Text(stringResource(screen.resourceId)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(0)
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
@@ -123,20 +123,35 @@ fun HomeScreen(
                 navController = navController,
                 startDestination = Screen.Tab1.route
             ) {
-                items.forEach { screen ->
-                    composable(screen.route) {
-                        // showSnackbar
-                        screen.content.invoke({ text ->
-                            scope.launch {
-                                scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                                scaffoldState.snackbarHostState.showSnackbar(message = text)
-                            }
-                        },
-                        // navigate
-                        { route ->
-                            navController.navigate(route)
-                        })
+                // 하단탭
+                tabs.forEach { screen ->
+                    composable(screen.route) { backStackEntry ->
+                        screen.content.invoke(
+                            // showSnackbar
+                            { text ->
+                                scope.launch {
+                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                                    scaffoldState.snackbarHostState.showSnackbar(message = text)
+                                }
+                            },
+                            // navigate
+                            { route ->
+                                navController.navigate(route)
+                            })
                     }
+                }
+                // 2-Depth
+                composable(
+                    route = "photo/{title}/{url}",
+                    arguments = listOf(
+                        navArgument("url" ) { type = NavType.StringType },
+                        navArgument("title") { type = NavType.StringType }
+                    )
+                ) { backStackEntry ->
+                    val title = backStackEntry.arguments?.getString("title")
+                    val encodedUrl = backStackEntry.arguments?.getString("url")
+                    val decodedUrl = String(Base64.decode(encodedUrl, 0))
+                    PhotoDetailScreen(title = title, url = decodedUrl)
                 }
             }
             DefaultSnackbar(

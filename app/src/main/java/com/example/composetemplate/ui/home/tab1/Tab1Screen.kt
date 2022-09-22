@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.composetemplate.data.Photo
 import com.example.composetemplate.ui.common.Loading
+import java.util.Base64
 
 @Composable
 fun Tab1Screen(
@@ -40,7 +41,8 @@ fun Tab1Screen(
                     itemContent = { index ->
                         photoItem(uiState.photos[index]) {
                             showSnackbar("$index 번 째 아이템 클릭")
-                            navigate("photo")
+                            val encoded = android.util.Base64.encodeToString(uiState.photos[index].url.toByteArray(), android.util.Base64.DEFAULT)
+                            navigate("photo/${uiState.photos[index].title}/$encoded")
                         }
                     }
                 )
