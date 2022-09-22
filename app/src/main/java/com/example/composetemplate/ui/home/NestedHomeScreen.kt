@@ -54,6 +54,7 @@ const val BACK_PRESS_DELAY_TIME: Long = 2000
 var backKeyPressedTime: Long = 0
 var toast: Toast? = null
 
+// 하단탭에 대한 네비게이션만 처리
 @Composable
 fun NestedHomeScreen(
     navigate: (String) -> Unit,
@@ -120,9 +121,8 @@ fun NestedHomeScreen(
                 navController = navController,
                 startDestination = Screen.Tab1.route
             ) {
-                // 하단탭
                 tabs.forEach { screen ->
-                    composable(screen.route) { backStackEntry ->
+                    composable(screen.route) {
                         screen.content.invoke(
                             // showSnackbar
                             { text ->
@@ -131,26 +131,11 @@ fun NestedHomeScreen(
                                     scaffoldState.snackbarHostState.showSnackbar(message = text)
                                 }
                             },
-                            // navigate
-                            { route ->
-                                //navController.navigate(route)
-                                navigate.invoke(route)
-                            })
+                            // 상세화면 네비게이션
+                            { route -> navigate.invoke(route) }
+                        )
                     }
                 }
-                // 2-Depth
-//                composable(
-//                    route = "photo/{title}/{url}",
-//                    arguments = listOf(
-//                        navArgument("url" ) { type = NavType.StringType },
-//                        navArgument("title") { type = NavType.StringType }
-//                    )
-//                ) { backStackEntry ->
-//                    val title = backStackEntry.arguments?.getString("title")
-//                    val encodedUrl = backStackEntry.arguments?.getString("url")
-//                    val decodedUrl = String(Base64.decode(encodedUrl, 0))
-//                    PhotoDetailScreen(title = title, url = decodedUrl)
-//                }
             }
             DefaultSnackbar(
                 snackbarHostState = scaffoldState.snackbarHostState,
