@@ -5,9 +5,6 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.*
@@ -33,7 +30,6 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 sealed class Screen(
     @DrawableRes val icon: Int,
@@ -112,10 +108,14 @@ fun NestedHomeScreen(
                             label = { Text(stringResource(screen.resourceId)) },
                             selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                             onClick = {
-                                navController.navigate(screen.route) {
-                                    popUpTo(0)
-                                    launchSingleTop = true
-                                    restoreState = true
+                                val from = currentDestination?.route
+                                val to = screen.route
+                                if (from != to) {
+                                    navController.navigate(screen.route) {
+                                        popUpTo(0)
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             }
                         )
