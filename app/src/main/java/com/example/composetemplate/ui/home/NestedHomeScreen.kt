@@ -112,7 +112,9 @@ fun NestedHomeScreen(
                                 val to = screen.route
                                 if (from != to) {
                                     navController.navigate(screen.route) {
-                                        popUpTo(0)
+                                        popUpTo(0) {
+                                            saveState = true
+                                        }
                                         launchSingleTop = true
                                         restoreState = true
                                     }
