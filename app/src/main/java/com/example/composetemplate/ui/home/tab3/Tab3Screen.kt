@@ -15,7 +15,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun Tab3Screen(
     viewModel: Tab3ViewModel = hiltViewModel(),
-    showSnackbar: (String) -> Unit
+    showSnackbar: (String) -> Unit,
+    navigate: (String) -> Unit
 ) {
     LaunchedEffect(true) {
         viewModel.init()
