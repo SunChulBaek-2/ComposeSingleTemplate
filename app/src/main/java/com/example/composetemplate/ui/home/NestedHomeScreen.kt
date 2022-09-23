@@ -4,6 +4,12 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,17 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.composetemplate.R
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen
 import com.example.composetemplate.ui.widget.DefaultSnackbar
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 sealed class Screen(
     @DrawableRes val icon: Int,
@@ -55,13 +62,14 @@ var backKeyPressedTime: Long = 0
 var toast: Toast? = null
 
 // 하단탭에 대한 네비게이션만 처리
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NestedHomeScreen(
     navigate: (String) -> Unit,
     showToast: (String) -> Toast,
     onBack: () -> Unit
 ) {
-    val navController = rememberNavController()
+    val navController = rememberAnimatedNavController()
     val showTopBottomBar = navController.currentBackStackEntryAsState().value?.destination?.route in tabs.map { it.route}
     BackHandler {
         if (!navController.popBackStack()) {
@@ -117,12 +125,24 @@ fun NestedHomeScreen(
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavHost(
+            AnimatedNavHost(
                 navController = navController,
                 startDestination = Screen.Tab1.route
             ) {
                 tabs.forEach { screen ->
-                    composable(screen.route) {
+                    composable(
+                        route = screen.route,
+                        enterTransition = {
+                            val from = initialState.destination.route?.substring(3)?.toInt() ?: 0
+                            val to = screen.route.substring(3).toInt()
+                            slideInHorizontally(initialOffsetX = { fullWidth -> if (from < to) fullWidth else -fullWidth })
+                        },
+                        exitTransition = {
+                            val from = screen.route.substring(3).toInt()
+                            val to = targetState.destination.route?.substring(3)?.toInt() ?: 0
+                            slideOutHorizontally(targetOffsetX = { fullWidth -> if (from < to) -fullWidth else fullWidth })
+                        }
+                    ) {
                         screen.content.invoke(
                             // showSnackbar
                             { text ->

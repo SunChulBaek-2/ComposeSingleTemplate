@@ -60,6 +60,20 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE}")
 
+    // accompanist
+    implementation(Libs.ACCOMPANIST_SYSTEM_UI_CONTROLLER)
+    implementation(Libs.ACCOMPANIST_APPCOMPAT_THEME)
+    implementation(Libs.ACCOMPANIST_PAGER)
+    implementation(Libs.ACCOMPANIST_PAGER_INDICATOR)
+    implementation(Libs.ACCOMPANIST_PERMISSIONS)
+    implementation(Libs.ACCOMPANIST_PLACEHOLDER_MATERIAL)
+    implementation(Libs.ACCOMPANIST_PLACEHOLDER)
+    implementation(Libs.ACCOMPANIST_FLOW_LAYOUT)
+    implementation(Libs.ACCOMPANIST_NAVIGATION_ANIMATION)
+    implementation(Libs.ACCOMPANIST_NAVIGATION_MATERIAL)
+    implementation(Libs.ACCOMPANIST_DRAWABLE_PAINTER)
+    implementation(Libs.ACCOMPANIST_SWIPE_TO_REFRESH)
+
     // Compose
     implementation(Libs.COMPOSE_UI)
     implementation(Libs.COMPOSE_MATERIAL)
