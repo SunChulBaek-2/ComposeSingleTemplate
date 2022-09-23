@@ -41,13 +41,13 @@ sealed class Screen(
         Tab1Screen(showSnackbar = showSnackbar, navigate = navigate)
     })
     object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { showSnackbar, navigate ->
-        Tab2Screen(showSnackbar = showSnackbar)
+        Tab2Screen(showSnackbar = showSnackbar, navigate = navigate)
     })
     object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { showSnackbar, navigate ->
-        Tab3Screen(showSnackbar = showSnackbar)
+        Tab3Screen(showSnackbar = showSnackbar, navigate = navigate)
     })
     object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { showSnackbar, navigate ->
-        Tab4Screen(showSnackbar = showSnackbar)
+        Tab4Screen(showSnackbar = showSnackbar, navigate = navigate)
     })
 }
 

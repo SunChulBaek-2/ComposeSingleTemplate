@@ -14,6 +14,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.composetemplate.data.Photo
 import com.example.composetemplate.ui.common.ErrorScreen
 import com.example.composetemplate.ui.common.LoadingScreen
+import com.google.accompanist.swiperefresh.SwipeRefresh
 
 @Composable
 fun Tab1Screen(
@@ -36,18 +37,23 @@ fun Tab1Screen(
         } else if (uiState.isError) {
             ErrorScreen()
         } else {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(
-                    count = uiState.photos.size,
-                    key = { index -> uiState.photos[index].id },
-                    itemContent = { index ->
-                        photoItem(uiState.photos[index]) {
-                            showSnackbar("$index 번 째 아이템 클릭")
-                            val encoded = android.util.Base64.encodeToString(uiState.photos[index].url.toByteArray(), android.util.Base64.DEFAULT)
-                            navigate("photo/${uiState.photos[index].title}/$encoded")
+            SwipeRefresh(
+                state = uiState.swipeRefreshState,
+                onRefresh = { viewModel.init() }
+            ) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(
+                        count = uiState.photos.size,
+                        key = { index -> uiState.photos[index].id },
+                        itemContent = { index ->
+                            photoItem(uiState.photos[index]) {
+                                showSnackbar("$index 번 째 아이템 클릭")
+                                val encoded = android.util.Base64.encodeToString(uiState.photos[index].url.toByteArray(), android.util.Base64.DEFAULT)
+                                navigate("photo/${uiState.photos[index].title}/$encoded")
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
