@@ -14,6 +14,7 @@ import javax.inject.Inject
 
 data class Tab1UiState(
     val isLoading: Boolean,
+    val isError: Boolean,
     val photos: List<Photo>
 )
 
@@ -22,20 +23,20 @@ class Tab1ViewModel @Inject constructor(
     private val getPhotosUseCase: GetPhotosUseCase
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(Tab1UiState(false, listOf()))
+    var uiState by mutableStateOf(Tab1UiState(false, false, listOf()))
         private set
 
     fun init() = onMain {
-        uiState = Tab1UiState( true, listOf())
+        uiState = Tab1UiState( true, false, listOf())
         getPhotosUseCase(GetPhotosParam()).collect { result ->
             when {
                 result.isSuccess -> {
                     Timber.d("Get Photo success")
-                    uiState = Tab1UiState(false, result.getOrDefault(listOf()))
+                    uiState = Tab1UiState(false, false, result.getOrDefault(listOf()))
                 }
                 result.isFailure -> {
                     Timber.d("Get Photo failed")
-                    uiState = Tab1UiState(false,  result.getOrDefault(listOf()))
+                    uiState = Tab1UiState(false,  true, result.getOrDefault(listOf()))
                 }
             }
         }

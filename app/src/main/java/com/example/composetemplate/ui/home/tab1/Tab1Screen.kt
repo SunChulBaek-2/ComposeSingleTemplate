@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.composetemplate.data.Photo
-import com.example.composetemplate.ui.common.Loading
-import java.util.Base64
+import com.example.composetemplate.ui.common.ErrorScreen
+import com.example.composetemplate.ui.common.LoadingScreen
 
 @Composable
 fun Tab1Screen(
@@ -32,7 +32,9 @@ fun Tab1Screen(
             .background(MaterialTheme.colors.background)
     ) {
         if (uiState.isLoading) {
-            Loading()
+            LoadingScreen()
+        } else if (uiState.isError) {
+            ErrorScreen()
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(
