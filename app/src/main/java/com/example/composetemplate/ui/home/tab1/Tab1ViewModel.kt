@@ -28,17 +28,19 @@ class Tab1ViewModel @Inject constructor(
     var uiState by mutableStateOf(Tab1UiState())
         private set
 
-    fun init() = onMain {
-        uiState = Tab1UiState(isLoading = true)
-        getPhotosUseCase(GetPhotosParam()).collect { result ->
-            when {
-                result.isSuccess -> {
-                    Timber.d("Get Photo success")
-                    uiState = Tab1UiState(photos = result.getOrDefault(listOf()))
-                }
-                result.isFailure -> {
-                    Timber.d("Get Photo failed")
-                    uiState = Tab1UiState(isError = true)
+    fun init(forced: Boolean = false) = onMain {
+        if (forced || uiState.photos.isEmpty()) {
+            uiState = Tab1UiState(isLoading = true)
+            getPhotosUseCase(GetPhotosParam()).collect { result ->
+                when {
+                    result.isSuccess -> {
+                        Timber.d("Get Photo success")
+                        uiState = Tab1UiState(photos = result.getOrDefault(listOf()))
+                    }
+                    result.isFailure -> {
+                        Timber.d("Get Photo failed")
+                        uiState = Tab1UiState(isError = true)
+                    }
                 }
             }
         }

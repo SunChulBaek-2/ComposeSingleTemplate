@@ -39,7 +39,7 @@ fun Tab1Screen(
         } else {
             SwipeRefresh(
                 state = uiState.swipeRefreshState,
-                onRefresh = { viewModel.init() }
+                onRefresh = { viewModel.init(forced = true) }
             ) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(
