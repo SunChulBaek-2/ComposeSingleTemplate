@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composetemplate.R
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
@@ -29,6 +30,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
 
+// 하단탭 관련
 sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
@@ -49,8 +51,10 @@ sealed class Screen(
     })
 }
 
-val tabs = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
+val ITEMS = listOf(Screen.Tab1, Screen.Tab2, Screen.Tab3, Screen.Tab4)
+val START_DESTINATION = Screen.Tab1
 
+// 백 키 관련
 const val BACK_PRESS_DELAY_TIME: Long = 2000
 var backKeyPressedTime: Long = 0
 var toast: Toast? = null
@@ -64,99 +68,133 @@ fun HomeScreen(
     onBack: () -> Unit
 ) {
     val navController = rememberAnimatedNavController()
-    BackHandler {
-        if (!navController.popBackStack()) {
-            if (System.currentTimeMillis() > backKeyPressedTime + BACK_PRESS_DELAY_TIME) {
-                backKeyPressedTime = System.currentTimeMillis()
-                toast = showToast("\'뒤로\' 버튼 한번 더 누르시면 종료됩니다.")
-                return@BackHandler
-            }
-            if (System.currentTimeMillis() <= backKeyPressedTime + BACK_PRESS_DELAY_TIME) {
-                toast?.cancel()
-                onBack.invoke()
-            }
-        }
-    }
-
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+
+    // 백키 2회에 종료 처리
+    BackCloseHandler(navController, showToast, onBack)
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(Icons.Default.Menu, "Menu")
+        topBar = { MyTopAppBar() },
+        bottomBar = { MyBottomNavigation(navController, ITEMS) }
+    ) { innerPadding ->
+        Box(modifier = Modifier.padding(innerPadding)) {
+            HomeNavHost(
+                navController = navController,
+                items = ITEMS,
+                startDestination = START_DESTINATION,
+                navigate = navigate,
+                showSnackbar = { text ->
+                    // showSnackbar
+                    scope.launch {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                        scaffoldState.snackbarHostState.showSnackbar(message = text)
                     }
                 }
             )
-        },
-        bottomBar = {
-            BottomNavigation {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                tabs.forEach { screen ->
-                    BottomNavigationItem(
-                        icon = { Icon(painterResource(screen.icon), null) },
-                        label = { Text(stringResource(screen.resourceId)) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                        onClick = {
-                            val from = currentDestination?.route
-                            val to = screen.route
-                            if (from != to) {
-                                navController.navigate(screen.route) {
-                                    popUpTo(0) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            AnimatedNavHost(
-                navController = navController,
-                startDestination = Screen.Tab1.route
-            ) {
-                tabs.forEach { screen ->
-                    composable(
-                        route = screen.route,
-                        enterTransition = {
-                            val from = initialState.destination.route?.substring(3)?.toInt() ?: 0
-                            val to = screen.route.substring(3).toInt()
-                            slideInHorizontally(initialOffsetX = { fullWidth -> if (from < to) fullWidth else -fullWidth })
-                        },
-                        exitTransition = {
-                            val from = screen.route.substring(3).toInt()
-                            val to = targetState.destination.route?.substring(3)?.toInt() ?: 0
-                            slideOutHorizontally(targetOffsetX = { fullWidth -> if (from < to) -fullWidth else fullWidth })
-                        }
-                    ) {
-                        screen.content.invoke(
-                            // showSnackbar
-                            { text ->
-                                scope.launch {
-                                    scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                                    scaffoldState.snackbarHostState.showSnackbar(message = text)
-                                }
-                            },
-                            // 상세화면 네비게이션
-                            { route -> navigate.invoke(route) }
-                        )
-                    }
-                }
-            }
             DefaultSnackbar(
                 snackbarHostState = scaffoldState.snackbarHostState,
                 onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
+        }
+    }
+}
+
+/**
+ * 백키 2회에 종료 처리
+ */
+@Composable
+fun BackCloseHandler(
+    navController: NavHostController,
+    showToast: (String) -> Toast,
+    onBack: () -> Unit
+) = BackHandler {
+    if (!navController.popBackStack()) {
+        if (System.currentTimeMillis() > backKeyPressedTime + BACK_PRESS_DELAY_TIME) {
+            backKeyPressedTime = System.currentTimeMillis()
+            toast = showToast("\'뒤로\' 버튼 한번 더 누르시면 종료됩니다.")
+            return@BackHandler
+        }
+        if (System.currentTimeMillis() <= backKeyPressedTime + BACK_PRESS_DELAY_TIME) {
+            toast?.cancel()
+            onBack.invoke()
+        }
+    }
+}
+
+@Composable
+fun MyTopAppBar() = TopAppBar(
+    title = { Text(stringResource(R.string.app_name)) },
+    navigationIcon = {
+        IconButton(onClick = { }) {
+            Icon(Icons.Default.Menu, "Menu")
+        }
+    }
+)
+
+@Composable
+fun MyBottomNavigation(navController: NavHostController, items: List<Screen>) = BottomNavigation {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    items.forEach { screen ->
+        BottomNavigationItem(
+            icon = { Icon(painterResource(screen.icon), null) },
+            label = { Text(stringResource(screen.resourceId)) },
+            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+            onClick = {
+                // 다른탭으로 이동할때만 네비게이션
+                val from = currentDestination?.route
+                val to = screen.route
+                if (from != to) {
+                    navController.navigate(screen.route) {
+                        popUpTo(0) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun HomeNavHost(
+    navController: NavHostController,
+    items: List<Screen>,
+    startDestination: Screen,
+    navigate: (String) -> Unit,
+    showSnackbar: (String) -> Unit
+) {
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = startDestination.route
+    ) {
+        items.forEach { screen ->
+            composable(
+                route = screen.route,
+                enterTransition = {
+                    val from = initialState.destination.route?.substring(3)?.toInt() ?: 0
+                    val to = screen.route.substring(3).toInt()
+                    slideInHorizontally(initialOffsetX = { fullWidth -> if (from < to) fullWidth else -fullWidth })
+                },
+                exitTransition = {
+                    val from = screen.route.substring(3).toInt()
+                    val to = targetState.destination.route?.substring(3)?.toInt() ?: 0
+                    slideOutHorizontally(targetOffsetX = { fullWidth -> if (from < to) -fullWidth else fullWidth })
+                }
+            ) {
+                screen.content.invoke(
+                    // showSnackbar
+                    { text -> showSnackbar(text) },
+                    // 상세화면 네비게이션
+                    { route -> navigate.invoke(route) }
+                )
+            }
         }
     }
 }
