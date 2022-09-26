@@ -4,13 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.composetemplate.ui.home.HomeScreen
-import com.example.composetemplate.ui.splash.SplashScreen
+import com.example.composetemplate.ui.MainScreen
 import com.example.composetemplate.ui.theme.ComposeTemplateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +15,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeTemplateTheme {
-                MainNavHost(
+                MainScreen(
                     showToast = { text ->
                         Toast.makeText(this, text, Toast.LENGTH_SHORT).apply {
                             this.show()
@@ -30,29 +24,6 @@ class MainActivity : ComponentActivity() {
                     onBack = { this.finishAffinity() }
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun MainNavHost(
-    navController: NavHostController = rememberNavController(),
-    showToast: (String) -> Toast,
-    onBack: () -> Unit
-) {
-    NavHost(
-        navController = navController,
-        startDestination = "splash"
-    ) {
-        composable("splash") {
-            SplashScreen {
-                navController.navigate("home") {
-                    popUpTo(0)
-                }
-            }
-        }
-        composable("home") {
-            HomeScreen(showToast = showToast, onBack = onBack)
         }
     }
 }
