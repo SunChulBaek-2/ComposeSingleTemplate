@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.composetemplate.data.Photo
+import com.example.composetemplate.data.model.Photo
 import com.example.composetemplate.domain.GetPhotosParam
 import com.example.composetemplate.domain.GetPhotosUseCase
 import com.example.composetemplate.util.onMain
