@@ -11,18 +11,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.composetemplate.ui.home.HomeViewModel
+import timber.log.Timber
 
 @Composable
 fun Tab2Screen(
+    homeViewModel: HomeViewModel,
     viewModel: Tab2ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
     navigate: (String) -> Unit
 ) {
+    val uiState = viewModel.uiState
+
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    val uiState = viewModel.uiState
+    LaunchedEffect(homeViewModel.uiState) {
+        if (homeViewModel.uiState.reselect == "tab2") {
+            Timber.d("[템플릿] Tab2 reselected")
+            // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
+        }
+    }
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.Yellow.copy(0.3f))) {

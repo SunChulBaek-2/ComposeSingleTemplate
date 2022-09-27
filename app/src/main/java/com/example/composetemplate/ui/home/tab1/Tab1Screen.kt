@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,19 +15,31 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.composetemplate.data.model.Photo
 import com.example.composetemplate.ui.common.ErrorScreen
 import com.example.composetemplate.ui.common.LoadingScreen
+import com.example.composetemplate.ui.home.HomeViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import timber.log.Timber
 
 @Composable
 fun Tab1Screen(
+    homeViewModel: HomeViewModel,
     viewModel: Tab1ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
     navigate: (String) -> Unit
 ) {
+    val uiState = viewModel.uiState
+    val listState = rememberLazyListState()
+
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    val uiState = viewModel.uiState
+    LaunchedEffect(homeViewModel.uiState) {
+        if (homeViewModel.uiState.reselect == "tab1") {
+            Timber.d("[템플릿] Tab1 reselected")
+            listState.animateScrollToItem(0)
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +54,7 @@ fun Tab1Screen(
                 state = uiState.swipeRefreshState,
                 onRefresh = { viewModel.init(forced = true) }
             ) {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                     items(
                         count = uiState.photos.size,
                         key = { index -> uiState.photos[index].id },

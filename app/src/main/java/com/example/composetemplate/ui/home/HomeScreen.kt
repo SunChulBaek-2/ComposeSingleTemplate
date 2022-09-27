@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -35,19 +36,19 @@ sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
     @StringRes val resourceId: Int,
-    val content: (@Composable ((String) -> Unit, (String) -> Unit) -> Unit)
+    val content: (@Composable (HomeViewModel, (String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { showSnackbar, navigate ->
-        Tab1Screen(showSnackbar = showSnackbar, navigate = navigate)
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { homeViewModel, showSnackbar, navigate ->
+        Tab1Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { showSnackbar, navigate ->
-        Tab2Screen(showSnackbar = showSnackbar, navigate = navigate)
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { homeViewModel, showSnackbar, navigate ->
+        Tab2Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { showSnackbar, navigate ->
-        Tab3Screen(showSnackbar = showSnackbar, navigate = navigate)
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { homeViewModel, showSnackbar, navigate ->
+        Tab3Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { showSnackbar, navigate ->
-        Tab4Screen(showSnackbar = showSnackbar, navigate = navigate)
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { homeViewModel, showSnackbar, navigate ->
+        Tab4Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
     })
 }
 
@@ -63,6 +64,7 @@ var toast: Toast? = null
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel = viewModel(),
     navigate: (String) -> Unit,
     showToast: (String) -> Toast,
     onBack: () -> Unit
@@ -77,10 +79,15 @@ fun HomeScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { MyTopAppBar() },
-        bottomBar = { MyBottomNavigation(navController, ITEMS) }
+        bottomBar = {
+            MyBottomNavigation(navController, ITEMS) { route ->
+                viewModel.reselect(route)
+            }
+        }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             HomeNavHost(
+                viewModel = viewModel,
                 navController = navController,
                 items = ITEMS,
                 startDestination = START_DESTINATION,
@@ -135,7 +142,7 @@ fun MyTopAppBar() = TopAppBar(
 )
 
 @Composable
-fun MyBottomNavigation(navController: NavHostController, items: List<Screen>) = BottomNavigation {
+fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselet: (String) -> Unit) = BottomNavigation {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     items.forEach { screen ->
@@ -155,6 +162,8 @@ fun MyBottomNavigation(navController: NavHostController, items: List<Screen>) = 
                         launchSingleTop = true
                         restoreState = true
                     }
+                } else {
+                    onReselet.invoke(currentDestination.route!!)
                 }
             }
         )
@@ -164,6 +173,7 @@ fun MyBottomNavigation(navController: NavHostController, items: List<Screen>) = 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeNavHost(
+    viewModel: HomeViewModel,
     navController: NavHostController,
     items: List<Screen>,
     startDestination: Screen,
@@ -189,6 +199,7 @@ fun HomeNavHost(
                 }
             ) {
                 screen.content.invoke(
+                    viewModel,
                     // showSnackbar
                     { text -> showSnackbar(text) },
                     // 상세화면 네비게이션
