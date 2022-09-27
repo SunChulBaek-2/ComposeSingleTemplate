@@ -36,6 +36,7 @@ fun Tab1Screen(
     LaunchedEffect(homeViewModel.uiState) {
         if (homeViewModel.uiState.reselect == "tab1") {
             Timber.d("[템플릿] Tab1 reselected")
+            // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             listState.animateScrollToItem(0)
         }
     }

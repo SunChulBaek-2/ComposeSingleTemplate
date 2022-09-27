@@ -31,6 +31,7 @@ fun Tab2Screen(
         if (homeViewModel.uiState.reselect == "tab2") {
             Timber.d("[템플릿] Tab2 reselected")
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
+            showSnackbar("Tab2 리셀렉")
         }
     }
 
