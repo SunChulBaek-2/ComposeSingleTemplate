@@ -6,39 +6,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.composetemplate.ui.home.HomeViewModel
-import timber.log.Timber
+import com.example.composetemplate.event.NavItemReselectEvent
+import com.example.composetemplate.util.EventBus
 
 @Composable
 fun Tab3Screen(
-    homeViewModel: HomeViewModel,
+    route: String,
     viewModel: Tab3ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
-    navigate: (String) -> Unit,
-    onDispose: (String) -> Unit
+    navigate: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
+    val reselectEvent = EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
 
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    LaunchedEffect(homeViewModel.uiState) {
-        if (homeViewModel.uiState.reselect == "tab3") {
-            Timber.d("[템플릿] Tab3Screen reselected")
+    LaunchedEffect(reselectEvent.value) {
+        if (reselectEvent.value.route == route) {
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
-            showSnackbar("Tab3Screen 리셀렉")
+            showSnackbar("$route 리셀렉")
         }
-    }
-
-    DisposableEffect(true) {
-        onDispose { onDispose.invoke("Tab3Screen") }
     }
 
     Box(modifier = Modifier
@@ -46,7 +41,7 @@ fun Tab3Screen(
         .background(Color.Green.copy(0.3f))) {
         Button(
             modifier = Modifier.align(Alignment.Center),
-            onClick = { showSnackbar("Tab3Screen 클릭") }
+            onClick = { showSnackbar("$route 클릭") }
         ) {
             Text(uiState.text)
         }

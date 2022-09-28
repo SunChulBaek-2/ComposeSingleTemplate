@@ -16,16 +16,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composetemplate.R
+import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen
 import com.example.composetemplate.ui.widget.DefaultSnackbar
+import com.example.composetemplate.util.EventBus
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -37,19 +38,19 @@ sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
     @StringRes val resourceId: Int,
-    val content: (@Composable (HomeViewModel, (String) -> Unit, (String) -> Unit, (String) -> Unit) -> Unit)
+    val content: (@Composable (String, (String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { homeViewModel, showSnackbar, navigate, onDispose ->
-        Tab1Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { route, showSnackbar, navigate ->
+        Tab1Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { homeViewModel, showSnackbar, navigate, onDispose ->
-        Tab2Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { route, showSnackbar, navigate ->
+        Tab2Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { homeViewModel, showSnackbar, navigate, onDispose ->
-        Tab3Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { route, showSnackbar, navigate ->
+        Tab3Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { homeViewModel, showSnackbar, navigate, onDispose ->
-        Tab4Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { route, showSnackbar, navigate ->
+        Tab4Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
 }
 
@@ -65,7 +66,6 @@ var toast: Toast? = null
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = viewModel(),
     navigate: (String) -> Unit,
     showToast: (String) -> Toast,
     onBack: () -> Unit
@@ -82,13 +82,15 @@ fun HomeScreen(
         topBar = { MyTopAppBar() },
         bottomBar = {
             MyBottomNavigation(navController, ITEMS) { route ->
-                viewModel.reselect(route)
+                Timber.d("[템플릿] $route 리셀렉")
+                scope.launch {
+                    EventBus.publish(NavItemReselectEvent(route))
+                }
             }
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             HomeNavHost(
-                viewModel = viewModel,
                 navController = navController,
                 items = ITEMS,
                 startDestination = START_DESTINATION,
@@ -99,11 +101,6 @@ fun HomeScreen(
                         scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                         scaffoldState.snackbarHostState.showSnackbar(message = text)
                     }
-                },
-                onDispose = { route ->
-                    Timber.d("[템플릿] ${route}.onDispose()")
-                    // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
-                    viewModel.reselect("")
                 }
             )
             DefaultSnackbar(
@@ -179,13 +176,11 @@ fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, on
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeNavHost(
-    viewModel: HomeViewModel,
     navController: NavHostController,
     items: List<Screen>,
     startDestination: Screen,
     navigate: (String) -> Unit,
-    showSnackbar: (String) -> Unit,
-    onDispose: (String) -> Unit
+    showSnackbar: (String) -> Unit
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -206,12 +201,11 @@ fun HomeNavHost(
                 }
             ) {
                 screen.content.invoke(
-                    viewModel,
+                    screen.route,
                     // showSnackbar
                     { text -> showSnackbar(text) },
                     // 상세화면 네비게이션
-                    { route -> navigate.invoke(route) },
-                    onDispose
+                    { route -> navigate.invoke(route) }
                 )
             }
         }

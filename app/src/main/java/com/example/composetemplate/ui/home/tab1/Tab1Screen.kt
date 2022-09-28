@@ -7,44 +7,39 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.example.composetemplate.data.model.Photo
+import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.common.ErrorScreen
 import com.example.composetemplate.ui.common.LoadingScreen
-import com.example.composetemplate.ui.home.HomeViewModel
+import com.example.composetemplate.util.EventBus
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import timber.log.Timber
 
 @Composable
 fun Tab1Screen(
-    homeViewModel: HomeViewModel,
+    route: String,
     viewModel: Tab1ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
-    navigate: (String) -> Unit,
-    onDispose: (String) -> Unit
+    navigate: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
     val listState = rememberLazyListState()
+    val reselectEvent = EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
 
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    LaunchedEffect(homeViewModel.uiState) {
-        if (homeViewModel.uiState.reselect == "tab1") {
-            Timber.d("[템플릿] Tab1Screen reselected")
+    LaunchedEffect(reselectEvent.value) {
+        if (reselectEvent.value.route == route) {
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             listState.animateScrollToItem(0)
         }
-    }
-
-    DisposableEffect(true) {
-        onDispose { onDispose.invoke("Tab1Screen") }
     }
 
     Box(
