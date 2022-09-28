@@ -25,7 +25,8 @@ fun Tab1Screen(
     homeViewModel: HomeViewModel,
     viewModel: Tab1ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
-    navigate: (String) -> Unit
+    navigate: (String) -> Unit,
+    onDispose: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
     val listState = rememberLazyListState()
@@ -36,18 +37,14 @@ fun Tab1Screen(
 
     LaunchedEffect(homeViewModel.uiState) {
         if (homeViewModel.uiState.reselect == "tab1") {
-            Timber.d("[템플릿] Tab1 reselected")
+            Timber.d("[템플릿] Tab1Screen reselected")
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             listState.animateScrollToItem(0)
         }
     }
 
     DisposableEffect(true) {
-        onDispose {
-            Timber.d("[템플릿] Tab1Screen.onDispose()")
-            // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
-            homeViewModel.reselect("")
-        }
+        onDispose { onDispose.invoke("Tab1Screen") }
     }
 
     Box(

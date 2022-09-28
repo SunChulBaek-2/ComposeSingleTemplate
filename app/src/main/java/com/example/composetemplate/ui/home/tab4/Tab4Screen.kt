@@ -20,7 +20,8 @@ fun Tab4Screen(
     homeViewModel: HomeViewModel,
     viewModel: Tab4ViewModel = hiltViewModel(),
     showSnackbar: (String) -> Unit,
-    navigate: (String) -> Unit
+    navigate: (String) -> Unit,
+    onDispose: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -30,18 +31,14 @@ fun Tab4Screen(
 
     LaunchedEffect(homeViewModel.uiState) {
         if (homeViewModel.uiState.reselect == "tab4") {
-            Timber.d("[템플릿] Tab4 reselected")
+            Timber.d("[템플릿] Tab4Screen reselected")
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
-            showSnackbar("Tab4 리셀렉")
+            showSnackbar("Tab4Screen 리셀렉")
         }
     }
 
     DisposableEffect(true) {
-        onDispose {
-            Timber.d("[템플릿] Tab4Screen.onDispose()")
-            // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
-            homeViewModel.reselect("")
-        }
+        onDispose { onDispose.invoke("Tab4Screen") }
     }
 
     Box(modifier = Modifier
@@ -49,7 +46,7 @@ fun Tab4Screen(
         .background(Color.Blue.copy(0.3f))) {
         Button(
             modifier = Modifier.align(Alignment.Center),
-            onClick = { showSnackbar("탭4 클릭") }
+            onClick = { showSnackbar("Tab4Screen 클릭") }
         ) {
             Text(uiState.text)
         }

@@ -30,25 +30,26 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 // 하단탭 관련
 sealed class Screen(
     @DrawableRes val icon: Int,
     val route: String,
     @StringRes val resourceId: Int,
-    val content: (@Composable (HomeViewModel, (String) -> Unit, (String) -> Unit) -> Unit)
+    val content: (@Composable (HomeViewModel, (String) -> Unit, (String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { homeViewModel, showSnackbar, navigate ->
-        Tab1Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
+    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { homeViewModel, showSnackbar, navigate, onDispose ->
+        Tab1Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
     })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { homeViewModel, showSnackbar, navigate ->
-        Tab2Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
+    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { homeViewModel, showSnackbar, navigate, onDispose ->
+        Tab2Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
     })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { homeViewModel, showSnackbar, navigate ->
-        Tab3Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
+    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { homeViewModel, showSnackbar, navigate, onDispose ->
+        Tab3Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
     })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { homeViewModel, showSnackbar, navigate ->
-        Tab4Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate)
+    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { homeViewModel, showSnackbar, navigate, onDispose ->
+        Tab4Screen(homeViewModel, showSnackbar = showSnackbar, navigate = navigate, onDispose = onDispose)
     })
 }
 
@@ -98,6 +99,11 @@ fun HomeScreen(
                         scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
                         scaffoldState.snackbarHostState.showSnackbar(message = text)
                     }
+                },
+                onDispose = { route ->
+                    Timber.d("[템플릿] ${route}.onDispose()")
+                    // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
+                    viewModel.reselect("")
                 }
             )
             DefaultSnackbar(
@@ -178,7 +184,8 @@ fun HomeNavHost(
     items: List<Screen>,
     startDestination: Screen,
     navigate: (String) -> Unit,
-    showSnackbar: (String) -> Unit
+    showSnackbar: (String) -> Unit,
+    onDispose: (String) -> Unit
 ) {
     AnimatedNavHost(
         navController = navController,
@@ -203,7 +210,8 @@ fun HomeNavHost(
                     // showSnackbar
                     { text -> showSnackbar(text) },
                     // 상세화면 네비게이션
-                    { route -> navigate.invoke(route) }
+                    { route -> navigate.invoke(route) },
+                    onDispose
                 )
             }
         }
