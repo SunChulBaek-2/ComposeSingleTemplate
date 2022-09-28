@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,14 +30,14 @@ fun Tab1Screen(
 ) {
     val uiState = viewModel.uiState
     val listState = rememberLazyListState()
-    val reselectEvent = EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
+    val reselectEvent by EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
 
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    LaunchedEffect(reselectEvent.value) {
-        if (reselectEvent.value.route == route) {
+    LaunchedEffect(reselectEvent) {
+        if (reselectEvent.route == route) {
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             listState.animateScrollToItem(0)
         }

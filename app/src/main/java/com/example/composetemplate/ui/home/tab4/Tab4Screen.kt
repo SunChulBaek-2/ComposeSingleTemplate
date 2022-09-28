@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,22 +24,24 @@ fun Tab4Screen(
     navigate: (String) -> Unit
 ) {
     val uiState = viewModel.uiState
-    val reselectEvent = EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
+    val reselectEvent by EventBus.subscribe<NavItemReselectEvent>().collectAsState(NavItemReselectEvent())
 
     LaunchedEffect(true) {
         viewModel.init()
     }
 
-    LaunchedEffect(reselectEvent.value) {
-        if (reselectEvent.value.route == route) {
+    LaunchedEffect(reselectEvent) {
+        if (reselectEvent.route == route) {
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             showSnackbar("$route 리셀렉")
         }
     }
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Blue.copy(0.3f))) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Blue.copy(0.3f))
+    ) {
         Button(
             modifier = Modifier.align(Alignment.Center),
             onClick = { showSnackbar("$route 클릭") }
