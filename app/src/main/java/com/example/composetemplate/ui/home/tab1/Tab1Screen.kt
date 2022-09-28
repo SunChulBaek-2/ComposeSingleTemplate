@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,13 @@ fun Tab1Screen(
             Timber.d("[템플릿] Tab1 reselected")
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             listState.animateScrollToItem(0)
-            // TODO : 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
+        }
+    }
+
+    DisposableEffect(true) {
+        onDispose {
+            Timber.d("[템플릿] Tab1Screen.onDispose()")
+            // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
             homeViewModel.reselect("")
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +33,13 @@ fun Tab4Screen(
             Timber.d("[템플릿] Tab4 reselected")
             // TODO : 탭 재선택 시 동작 (ex. 최상단 스크롤)
             showSnackbar("Tab4 리셀렉")
-            // TODO : 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
+        }
+    }
+
+    DisposableEffect(true) {
+        onDispose {
+            Timber.d("[템플릿] Tab4Screen.onDispose()")
+            // 재선택 -> 다른탭 -> 해당탭 이동 시 다시 재선택된 것 처럼 동작하여 아래라인 필요
             homeViewModel.reselect("")
         }
     }
