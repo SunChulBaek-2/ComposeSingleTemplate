@@ -148,7 +148,7 @@ fun MyTopAppBar() = TopAppBar(
 )
 
 @Composable
-fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselet: (String) -> Unit) = BottomNavigation {
+fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselect: (String) -> Unit) = BottomNavigation {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     items.forEach { screen ->
@@ -169,7 +169,7 @@ fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, on
                         restoreState = true
                     }
                 } else {
-                    onReselet.invoke(currentDestination.route!!)
+                    onReselect.invoke(currentDestination.route!!)
                 }
             }
         )
