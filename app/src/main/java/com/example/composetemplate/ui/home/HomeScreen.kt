@@ -9,14 +9,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composetemplate.R
@@ -35,20 +31,21 @@ import timber.log.Timber
 // 하단탭 관련
 sealed class Screen(
     @DrawableRes val icon: Int,
+    @DrawableRes val iconSelected: Int,
     val route: String,
     @StringRes val resourceId: Int,
     val content: (@Composable (String, (String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_place, "tab1", R.string.tab1, { route, showSnackbar, navigate ->
+    object Tab1 : Screen(R.drawable.ic_outline_place, R.drawable.ic_place, "tab1", R.string.tab1, { route, showSnackbar, navigate ->
         Tab1Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab2 : Screen(R.drawable.ic_chat, "tab2", R.string.tab2, { route, showSnackbar, navigate ->
+    object Tab2 : Screen(R.drawable.ic_outline_chat, R.drawable.ic_chat, "tab2", R.string.tab2, { route, showSnackbar, navigate ->
         Tab2Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab3 : Screen(R.drawable.ic_camera, "tab3", R.string.tab3, { route, showSnackbar, navigate ->
+    object Tab3 : Screen(R.drawable.ic_outline_camera, R.drawable.ic_camera, "tab3", R.string.tab3, { route, showSnackbar, navigate ->
         Tab3Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab4 : Screen(R.drawable.ic_payment, "tab4", R.string.tab4, { route, showSnackbar, navigate ->
+    object Tab4 : Screen(R.drawable.ic_payment, R.drawable.ic_payment, "tab4", R.string.tab4, { route, showSnackbar, navigate ->
         Tab4Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
 }
@@ -142,14 +139,21 @@ fun MyTopAppBar() = TopAppBar(
 
 @Composable
 fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselect: (String) -> Unit) = NavigationBar {
+    var selectedItem by remember { mutableStateOf(0) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    items.forEach { screen ->
+    items.forEachIndexed { index, screen ->
         NavigationBarItem(
-            icon = { Icon(painterResource(screen.icon), null) },
+            icon = { Icon(painterResource(
+                if (selectedItem == index) {
+                    screen.iconSelected
+                } else {
+                    screen.icon
+                }), null) },
             label = { Text(stringResource(screen.resourceId)) },
-            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+            selected = selectedItem == index,
             onClick = {
+                selectedItem = index
                 // 다른탭으로 이동할때만 네비게이션
                 val from = currentDestination?.route
                 val to = screen.route
