@@ -5,7 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,7 +46,7 @@ fun Tab1Screen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         if (uiState.isLoading) {
             LoadingScreen()
@@ -77,7 +77,7 @@ fun Tab1Screen(
 
 @Composable
 fun photoItem(item: Photo, onClick: () -> Unit) {
-    val backgroundColor = MaterialTheme.colors.background
+    val backgroundColor = MaterialTheme.colorScheme.background
     val contentColor = contentColorFor(backgroundColor)
     Box(
         modifier = Modifier
