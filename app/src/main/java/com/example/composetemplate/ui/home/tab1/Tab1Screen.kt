@@ -77,31 +77,33 @@ fun Tab1Screen(
 
 @Composable
 fun photoItem(item: Photo, onClick: () -> Unit) {
-    val backgroundColor = MaterialTheme.colorScheme.background
-    val contentColor = contentColorFor(backgroundColor)
-    Box(
+    Card(
         modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
             .height(100.dp)
-            .background(backgroundColor)
-            .clickable {
-                onClick.invoke()
-            },
+            .clickable { onClick.invoke() },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        )
     ) {
-        SubcomposeAsyncImage(
-            modifier = Modifier.size(100.dp),
-            model = item.thumbnailUrl,
-            loading = {
-                CircularProgressIndicator(modifier = Modifier.padding(25.dp))
-            },
-            contentDescription = "thumbnail"
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 100.dp)
-                .padding(10.dp),
-            text = item.title,
-            color = contentColor
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            SubcomposeAsyncImage(
+                modifier = Modifier.size(100.dp),
+                model = item.thumbnailUrl,
+                loading = {
+                    CircularProgressIndicator(modifier = Modifier.padding(25.dp))
+                },
+                contentDescription = "thumbnail"
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 100.dp)
+                    .padding(10.dp),
+                text = item.title,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
