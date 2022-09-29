@@ -36,16 +36,16 @@ sealed class Screen(
     @StringRes val resourceId: Int,
     val content: (@Composable (String, (String) -> Unit, (String) -> Unit) -> Unit)
 ) {
-    object Tab1 : Screen(R.drawable.ic_outline_place, R.drawable.ic_place, "tab1", R.string.tab1, { route, showSnackbar, navigate ->
+    object Tab1 : Screen(R.drawable.ic_place_outline, R.drawable.ic_place, "tab1", R.string.tab1, { route, showSnackbar, navigate ->
         Tab1Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab2 : Screen(R.drawable.ic_outline_chat, R.drawable.ic_chat, "tab2", R.string.tab2, { route, showSnackbar, navigate ->
+    object Tab2 : Screen(R.drawable.ic_chat_outline, R.drawable.ic_chat, "tab2", R.string.tab2, { route, showSnackbar, navigate ->
         Tab2Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab3 : Screen(R.drawable.ic_outline_camera, R.drawable.ic_camera, "tab3", R.string.tab3, { route, showSnackbar, navigate ->
+    object Tab3 : Screen(R.drawable.ic_camera_outline, R.drawable.ic_camera, "tab3", R.string.tab3, { route, showSnackbar, navigate ->
         Tab3Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
-    object Tab4 : Screen(R.drawable.ic_payment, R.drawable.ic_payment, "tab4", R.string.tab4, { route, showSnackbar, navigate ->
+    object Tab4 : Screen(R.drawable.ic_settings_outline, R.drawable.ic_settings, "tab4", R.string.tab4, { route, showSnackbar, navigate ->
         Tab4Screen(route = route, showSnackbar = showSnackbar, navigate = navigate)
     })
 }
