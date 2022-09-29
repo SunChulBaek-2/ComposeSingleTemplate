@@ -45,14 +45,10 @@ fun Tab4Screen(
     ) {
         Button(
             modifier = Modifier.align(Alignment.Center),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.inverseOnSurface
-            ),
             onClick = { showSnackbar("$route 클릭") }
         ) {
             Text(
                 text = uiState.text,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

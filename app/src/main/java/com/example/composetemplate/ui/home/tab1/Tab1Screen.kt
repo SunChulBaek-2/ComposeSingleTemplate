@@ -82,10 +82,7 @@ fun photoItem(item: Photo, onClick: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
             .height(100.dp)
-            .clickable { onClick.invoke() },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+            .clickable { onClick.invoke() }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             SubcomposeAsyncImage(
