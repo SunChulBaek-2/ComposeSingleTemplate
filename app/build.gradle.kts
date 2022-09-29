@@ -77,6 +77,7 @@ dependencies {
     // Compose
     implementation(Libs.COMPOSE_UI)
     implementation(Libs.COMPOSE_MATERIAL)
+    implementation(Libs.COMPOSE_MATERIAL3)
     implementation(Libs.COMPOSE_UI_TOOLING_PREVIEW)
     implementation(Libs.ACTIVITY_COMPOSE)
     implementation(Libs.NAVIGATION_COMPOSE)

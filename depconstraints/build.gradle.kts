@@ -7,6 +7,7 @@ val accompanist = "0.25.1"
 val activityCompose = "1.5.1"
 val coil = "2.2.1"
 val compose = Versions.COMPOSE
+val composeMaterial3 = "1.0.0-beta03"
 val constraintLayoutCompose = "1.0.1"
 val coreKtx = "1.8.0"
 val hilt = Versions.HILT_AGP
@@ -35,6 +36,7 @@ dependencies {
         api("${Libs.COIL}:$coil")
         api("${Libs.COIL_COMPOSE}:$coil")
         api("${Libs.COMPOSE_MATERIAL}:$compose")
+        api("${Libs.COMPOSE_MATERIAL3}:$composeMaterial3")
         api("${Libs.COMPOSE_UI}:$compose")
         api("${Libs.COMPOSE_UI_TOOLING}:$compose")
         api("${Libs.COMPOSE_UI_TOOLING_PREVIEW}:$compose")
