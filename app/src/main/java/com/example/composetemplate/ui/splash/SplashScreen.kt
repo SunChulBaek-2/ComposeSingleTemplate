@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composetemplate.R
+import com.example.composetemplate.ui.theme.ComposeTemplateTheme
 import kotlinx.coroutines.delay
 
 @Composable
@@ -37,9 +38,11 @@ fun SplashScreen(
     val uiState = viewModel.uiState
     val backgroundColor = MaterialTheme.colorScheme.primary
     val contentColor = contentColorFor(backgroundColor)
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(backgroundColor)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = uiState.stringId?.let { stringResource(uiState.stringId) } ?: "",

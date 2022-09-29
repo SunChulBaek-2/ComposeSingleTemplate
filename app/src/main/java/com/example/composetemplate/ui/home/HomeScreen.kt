@@ -6,13 +6,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,7 +25,6 @@ import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
 import com.example.composetemplate.ui.home.tab4.Tab4Screen
-import com.example.composetemplate.ui.widget.DefaultSnackbar
 import com.example.composetemplate.util.EventBus
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -63,7 +62,7 @@ var backKeyPressedTime: Long = 0
 var toast: Toast? = null
 
 // 하단탭에 대한 네비게이션만 처리
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navigate: (String) -> Unit,
@@ -71,8 +70,8 @@ fun HomeScreen(
     onBack: () -> Unit
 ) {
     val navController = rememberAnimatedNavController()
-    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // 백키 2회에 종료 처리
     BackCloseHandler(navController, showToast, onBack)
@@ -87,7 +86,8 @@ fun HomeScreen(
                     EventBus.publish(NavItemReselectEvent(route))
                 }
             }
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             HomeNavHost(
@@ -98,15 +98,10 @@ fun HomeScreen(
                 showSnackbar = { text ->
                     // showSnackbar
                     scope.launch {
-                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
-                        scaffoldState.snackbarHostState.showSnackbar(message = text)
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                        snackbarHostState.showSnackbar(text)
                     }
                 }
-            )
-            DefaultSnackbar(
-                snackbarHostState = scaffoldState.snackbarHostState,
-                onDismiss = { scaffoldState.snackbarHostState.currentSnackbarData?.dismiss() },
-                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
     }
@@ -134,6 +129,7 @@ fun BackCloseHandler(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
     title = { Text(stringResource(R.string.app_name)) },
@@ -145,11 +141,11 @@ fun MyTopAppBar() = TopAppBar(
 )
 
 @Composable
-fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselect: (String) -> Unit) = BottomNavigation {
+fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, onReselect: (String) -> Unit) = NavigationBar {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     items.forEach { screen ->
-        BottomNavigationItem(
+        NavigationBarItem(
             icon = { Icon(painterResource(screen.icon), null) },
             label = { Text(stringResource(screen.resourceId)) },
             selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
