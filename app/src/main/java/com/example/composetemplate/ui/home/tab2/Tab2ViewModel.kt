@@ -9,7 +9,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 data class Tab2UiState(
-    val text: String
+    val text: String,
+    val dialog: Boolean = false
 )
 
 @HiltViewModel
@@ -21,5 +22,9 @@ class Tab2ViewModel @Inject constructor() : ViewModel() {
     fun init() {
         Timber.d("Tab2ViewModel.init()")
         uiState = Tab2UiState("Tab2Screen()")
+    }
+
+    fun showDialog(dialog: Boolean) {
+        uiState = Tab2UiState(uiState.text, dialog)
     }
 }
