@@ -1,13 +1,11 @@
 package com.example.composetemplate.ui.theme
 
 import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
@@ -53,6 +51,11 @@ fun ComposeTemplateTheme(
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+
+            // navigation bar 컬러를 NavigationBar 백그라운드와 동일하게 설정
+            (view.context as Activity).window.navigationBarColor = colorScheme.surfaceColorAtElevation(NavigationBarDefaults.Elevation).toArgb()
+            // navigation bar의 컨트롤 컬러를 어둡게
+            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightNavigationBars = true
         }
     }
 
