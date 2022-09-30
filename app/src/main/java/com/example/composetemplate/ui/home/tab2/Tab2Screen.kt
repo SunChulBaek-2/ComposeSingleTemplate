@@ -10,9 +10,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.event.NavItemReselectEvent
+import com.example.composetemplate.ui.common.SimpleDialog
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -41,9 +41,20 @@ fun Tab2Screen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        if(uiState.dialog) {
+            SimpleDialog(
+                title = "템플릿",
+                message = "Tab2Screen()",
+                onDismissRequest = { viewModel.showDialog(false) },
+                onOkClick = { viewModel.showDialog(false) }
+            )
+        }
         Button(
             modifier = Modifier.align(Alignment.Center),
-            onClick = { showSnackbar("$route 클릭") }
+            onClick = {
+                showSnackbar("$route 클릭")
+                viewModel.showDialog(true)
+            }
         ) {
             Text(
                 text = uiState.text,
