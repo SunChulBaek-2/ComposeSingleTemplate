@@ -55,7 +55,7 @@ fun ComposeTemplateTheme(
             // navigation bar 컬러를 NavigationBar 백그라운드와 동일하게 설정
             (view.context as Activity).window.navigationBarColor = colorScheme.surfaceColorAtElevation(NavigationBarDefaults.Elevation).toArgb()
             // navigation bar의 컨트롤 컬러를 어둡게
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightNavigationBars = true
+            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightNavigationBars = !darkTheme
         }
     }
 
