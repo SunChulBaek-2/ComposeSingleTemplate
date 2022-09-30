@@ -1,15 +1,9 @@
 package com.example.composetemplate.ui.common
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 
 @Composable
 fun SimpleDialog(
@@ -21,29 +15,23 @@ fun SimpleDialog(
     onOkClick: () -> Unit = { },
     onCancelClick: () -> Unit = { }
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0x33000000))
-    ) {
-        AlertDialog(modifier = Modifier.align(Alignment.Center),
-            onDismissRequest = onDismissRequest,
-            title = if (title != null) {
-                { Text(text = title) }
-            } else null,
-            text = { Text(text = message) },
-            confirmButton = {
-                TextButton(onClick = onOkClick) {
-                    Text(text = okText)
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = if (title != null) {
+            { Text(text = title) }
+        } else null,
+        text = { Text(text = message) },
+        confirmButton = {
+            TextButton(onClick = onOkClick) {
+                Text(text = okText)
+            }
+        },
+        dismissButton = if (cancelText != null) {
+            {
+                TextButton(onClick = onCancelClick) {
+                    Text(text = cancelText)
                 }
-            },
-            dismissButton = if (cancelText != null) {
-                {
-                    TextButton(onClick = onCancelClick) {
-                        Text(text = cancelText)
-                    }
-                }
-            } else null
-        )
-    }
+            }
+        } else null
+    )
 }
