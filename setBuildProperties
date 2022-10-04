@@ -1,7 +1,7 @@
 BUILD_NUMBER=${1}
 BUILD_PROPERTIES=build.properties
 
-echo applicationId=com.example.composetemplate > $BUILD_PROPERTIES
+echo applicationId=com.example.composetemplate.m2 > $BUILD_PROPERTIES
 echo compileSdk=33 >> $BUILD_PROPERTIES
 echo minSdk=21 >> $BUILD_PROPERTIES
 echo targetSdk=33 >> $BUILD_PROPERTIES
