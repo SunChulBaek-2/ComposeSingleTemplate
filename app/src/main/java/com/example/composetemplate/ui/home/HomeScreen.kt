@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.composetemplate.BuildConfig
 import com.example.composetemplate.R
 import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
@@ -129,7 +130,7 @@ fun BackCloseHandler(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
-    title = { Text(stringResource(R.string.app_name)) },
+    title = { Text(stringResource(R.string.app_name) + "(vc=${BuildConfig.VERSION_CODE})")},
     navigationIcon = {
         IconButton(onClick = { }) {
             Icon(Icons.Default.Menu, "Menu")
