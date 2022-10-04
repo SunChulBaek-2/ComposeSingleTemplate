@@ -130,7 +130,7 @@ fun BackCloseHandler(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
-    title = { Text(stringResource(R.string.app_name) + "(vc=${BuildConfig.VERSION_CODE})")},
+    title = { Text(stringResource(R.string.app_name))},
     navigationIcon = {
         IconButton(onClick = { }) {
             Icon(Icons.Default.Menu, "Menu")
