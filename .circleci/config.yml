@@ -33,6 +33,9 @@ jobs:
           name: Check Dependency Updates
           command: ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
       - run:
+          name: Set Build Properties
+          command: sudo chmod +x ./setBuildProperties; ./setBuildProperteis $CIRCLE_BUILD_NUM
+      - run:
           name: Build Binaries
           command: ./gradlew assembleDebug
       - store_artifacts:
