@@ -23,8 +23,22 @@ android {
 
         buildConfigField("String", "baseUrl", "\"${Versions.getProperty(buildProp, "baseUrl")}\"")
     }
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file(rootProject.file("debug.keystore"))
+            storePassword = "android"
+        }
+        create("release") {
 
+        }
+    }
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
