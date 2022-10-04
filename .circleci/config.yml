@@ -34,7 +34,7 @@ jobs:
           command: ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
       - run:
           name: Set Build Properties
-          command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM
+          command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM "1.0.0"
       - run:
           name: Build Binaries
           command: ./gradlew assembleDebug;mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-${CIRCLE_BUILD_NUM}.apk
