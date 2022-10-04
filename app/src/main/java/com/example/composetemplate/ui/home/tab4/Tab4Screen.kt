@@ -45,15 +45,15 @@ fun Tab4Screen(
             .background(Color.Blue.copy(0.3f))
     ) {
         Column(Modifier.align(Alignment.Center)) {
-            androidx.compose.material3.Button(
+            Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { showSnackbar("$route 클릭") }
             ) {
-                androidx.compose.material3.Text(text = uiState.text,)
+                Text(text = uiState.text,)
             }
-            androidx.compose.material3.Text(text = "App ID : ${BuildConfig.APPLICATION_ID}")
-            androidx.compose.material3.Text(text = "Version Code = ${BuildConfig.VERSION_CODE}")
-            androidx.compose.material3.Text(text = "Version Name = ${BuildConfig.VERSION_NAME}")
+            Text(text = "App ID : ${BuildConfig.APPLICATION_ID}")
+            Text(text = "Version Code = ${BuildConfig.VERSION_CODE}")
+            Text(text = "Version Name = ${BuildConfig.VERSION_NAME}")
         }
     }
 }
