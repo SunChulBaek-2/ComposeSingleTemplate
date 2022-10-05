@@ -37,7 +37,7 @@ jobs:
           command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM "1.0.0"
       - run:
           name: Build Binaries
-          command: ./gradlew assembleDebug;mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-${CIRCLE_BUILD_NUM}.apk
+          command: ./gradlew assembleDebug;mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/ComposeTemplateM2-debug-${CIRCLE_BUILD_NUM}.apk
       - store_artifacts:
           path: app/build/outputs/apk/debug
           destination: apk
