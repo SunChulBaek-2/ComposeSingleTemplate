@@ -12,6 +12,7 @@ val coreKtx = "1.8.0"
 val hilt = Versions.HILT_AGP
 val hiltNavigation = "1.0.0"
 val lifecycle = "2.5.1"
+val lottie = "5.2.0"
 val navigation = "2.5.2"
 val okhttp = "4.10.0"
 val retrofit = "2.9.0"
@@ -45,6 +46,7 @@ dependencies {
         api("${Libs.HILT_NAVIGATION}:$hiltNavigation")
         api("${Libs.LIFECYCLE_RUNTIME_KTX}:$lifecycle")
         api("${Libs.LIFECYCLE_VIEW_MODEL_COMPOSE}:$lifecycle")
+        api("${Libs.LOTTIE_COMPOSE}:$lottie")
         api("${Libs.NAVIGATION_COMPOSE}:$navigation")
         api("${Libs.OKHTTP_LOGGING_INTERCEPTOR}:$okhttp")
         api("${Libs.RETROFIT}:$retrofit")
