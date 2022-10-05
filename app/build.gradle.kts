@@ -97,6 +97,7 @@ dependencies {
     implementation(Libs.NAVIGATION_COMPOSE)
     implementation(Libs.LIFECYCLE_VIEW_MODEL_COMPOSE)
     implementation(Libs.CONSTRAINT_LAYOUT_COMPOSE)
+    implementation(Libs.LOTTIE_COMPOSE)
     debugImplementation(Libs.COMPOSE_UI_TOOLING)
 
     // Android Architecture Components
