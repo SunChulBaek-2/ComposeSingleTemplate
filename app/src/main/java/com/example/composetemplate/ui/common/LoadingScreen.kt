@@ -4,18 +4,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(background: Color = MaterialTheme.colors.background, progress: Float? = null) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(0.3f))
     ) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        if (progress != null) {
+            CircularProgressIndicator(
+                progress = progress,
+                modifier = Modifier.align(Alignment.Center),
+                color = MaterialTheme.colors.primary
+            )
+        } else {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = MaterialTheme.colors.primary
+            )
+        }
     }
 }

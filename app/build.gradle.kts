@@ -87,6 +87,7 @@ dependencies {
     implementation(Libs.ACCOMPANIST_NAVIGATION_MATERIAL)
     implementation(Libs.ACCOMPANIST_DRAWABLE_PAINTER)
     implementation(Libs.ACCOMPANIST_SWIPE_TO_REFRESH)
+    implementation(Libs.ACCOMPANIST_WEBVIEW)
 
     // Compose
     implementation(Libs.COMPOSE_UI)

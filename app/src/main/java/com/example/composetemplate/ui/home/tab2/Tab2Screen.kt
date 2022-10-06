@@ -1,20 +1,16 @@
 package com.example.composetemplate.ui.home.tab2
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Text
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.event.NavItemReselectEvent
-import com.example.composetemplate.ui.common.SimpleDialog
+import com.example.composetemplate.ui.common.MyWebView
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -38,27 +34,8 @@ fun Tab2Screen(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Yellow.copy(0.3f))
-    ) {
-        if(uiState.dialog) {
-            SimpleDialog(
-                title = "템플릿",
-                message = "Tab2Screen()",
-                onDismissRequest = { viewModel.showDialog(false) },
-                onOkClick = { viewModel.showDialog(false) }
-            )
-        }
-        Button(
-            modifier = Modifier.align(Alignment.Center),
-            onClick = {
-                showSnackbar("$route 클릭")
-                viewModel.showDialog(true)
-            }
-        ) {
-            Text(uiState.text)
-        }
-    }
+    MyWebView(
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
+        url = "https://www.google.com"
+    )
 }
