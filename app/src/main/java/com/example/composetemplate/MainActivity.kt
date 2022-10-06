@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.composetemplate.ui.common.MyWebView
 import com.example.composetemplate.ui.detail.PhotoDetailScreen
 import com.example.composetemplate.ui.home.HomeScreen
 import com.example.composetemplate.ui.splash.SplashScreen
@@ -88,6 +89,18 @@ fun MainNavHost(
             val encodedUrl = backStackEntry.arguments?.getString("url")
             val decodedUrl = String(Base64.decode(encodedUrl, 0))
             PhotoDetailScreen(title = title, url = decodedUrl)
+        }
+        composable(
+            route = "webview/{url}",
+            arguments = listOf(
+                navArgument("url" ) { type = NavType.StringType }
+            ),
+            enterTransition = { defaultEnterTransition() },
+            exitTransition = { defaultExitTransition() }
+        ) { backStackEntry ->
+            val encodedUrl = backStackEntry.arguments?.getString("url")
+            val decodedUrl = String(Base64.decode(encodedUrl, 0))
+            MyWebView(url = decodedUrl)
         }
     }
 }

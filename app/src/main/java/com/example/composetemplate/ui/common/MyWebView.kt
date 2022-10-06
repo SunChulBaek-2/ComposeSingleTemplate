@@ -3,6 +3,7 @@ package com.example.composetemplate.ui.common
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,7 +14,7 @@ const val WEBVIEW_PROGRESS_ERROR = -1
 
 // 웹뷰 (+ 프로그레스, 에러 화면)
 @Composable
-fun MyWebView(modifier: Modifier, url: String) {
+fun MyWebView(modifier: Modifier = Modifier, url: String) {
     var webViewProgress by remember { mutableStateOf(0) }
     val webViewState = rememberWebViewState(url = url)
     val webViewNavigator = rememberWebViewNavigator()
