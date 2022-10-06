@@ -11,6 +11,7 @@ object Libs {
     const val ACCOMPANIST_NAVIGATION_MATERIAL = "com.google.accompanist:accompanist-navigation-material"
     const val ACCOMPANIST_DRAWABLE_PAINTER = "com.google.accompanist:accompanist-drawablepainter"
     const val ACCOMPANIST_SWIPE_TO_REFRESH = "com.google.accompanist:accompanist-swiperefresh"
+    const val ACCOMPANIST_WEBVIEW = "com.google.accompanist:accompanist-webview"
     const val ACTIVITY_COMPOSE = "androidx.activity:activity-compose"
     const val COIL = "io.coil-kt:coil"
     const val COIL_COMPOSE = "io.coil-kt:coil-compose"

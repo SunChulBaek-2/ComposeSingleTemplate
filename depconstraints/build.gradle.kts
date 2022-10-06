@@ -33,6 +33,7 @@ dependencies {
         api("${Libs.ACCOMPANIST_NAVIGATION_MATERIAL}:$accompanist")
         api("${Libs.ACCOMPANIST_DRAWABLE_PAINTER}:$accompanist")
         api("${Libs.ACCOMPANIST_SWIPE_TO_REFRESH}:$accompanist")
+        api("${Libs.ACCOMPANIST_WEBVIEW}:$accompanist")
         api("${Libs.ACTIVITY_COMPOSE}:$activityCompose")
         api("${Libs.COIL}:$coil")
         api("${Libs.COIL_COMPOSE}:$coil")
