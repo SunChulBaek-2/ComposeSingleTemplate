@@ -9,7 +9,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 data class Tab2UiState(
-    val text: String,
+    val text: String
 )
 
 @HiltViewModel

@@ -1,16 +1,20 @@
 package com.example.composetemplate.ui.home.tab2
 
+import android.util.Base64
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.event.NavItemReselectEvent
-import com.example.composetemplate.ui.common.MyWebView
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -34,8 +38,21 @@ fun Tab2Screen(
         }
     }
 
-    MyWebView(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
-        url = "https://www.google.com"
-    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+    ) {
+        Button(
+            modifier = Modifier.align(Alignment.Center),
+            onClick = {
+                val encoded = Base64.encodeToString("https://www.google.com".toByteArray(), Base64.DEFAULT)
+                navigate("webview/$encoded")
+            }
+        ) {
+            Text(
+                text = uiState.text,
+            )
+        }
+    }
 }
