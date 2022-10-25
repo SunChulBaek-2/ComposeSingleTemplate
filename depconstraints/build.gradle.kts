@@ -3,18 +3,18 @@ plugins {
     id("maven-publish")
 }
 
-val accompanist = "0.25.1"
-val activityCompose = "1.6.0"
+val accompanist = "0.27.0"
+val activityCompose = "1.6.1"
 val coil = "2.2.2"
 val compose = Versions.COMPOSE
-val composeMaterial3 = "1.0.0-rc01"
+val composeMaterial3 = "1.0.0"
 val constraintLayoutCompose = "1.0.1"
 val coreKtx = "1.8.0"
 val hilt = Versions.HILT_AGP
 val hiltNavigation = "1.0.0"
 val lifecycle = "2.5.1"
 val lottie = "5.2.0"
-val navigation = "2.5.2"
+val navigation = "2.5.3"
 val okhttp = "4.10.0"
 val retrofit = "2.9.0"
 val timber = "5.0.1"
