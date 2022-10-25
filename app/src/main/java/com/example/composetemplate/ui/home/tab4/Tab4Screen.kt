@@ -2,6 +2,7 @@ package com.example.composetemplate.ui.home.tab4
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -13,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.composetemplate.BuildConfig
 import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.util.EventBus
 
@@ -42,11 +44,16 @@ fun Tab4Screen(
             .fillMaxSize()
             .background(Color.Blue.copy(0.3f))
     ) {
-        Button(
-            modifier = Modifier.align(Alignment.Center),
-            onClick = { showSnackbar("$route 클릭") }
-        ) {
-            Text(uiState.text)
+        Column(Modifier.align(Alignment.Center)) {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = { showSnackbar("$route 클릭") }
+            ) {
+                Text(text = uiState.text,)
+            }
+            Text(text = "App ID : ${BuildConfig.APPLICATION_ID}")
+            Text(text = "Version Code = ${BuildConfig.VERSION_CODE}")
+            Text(text = "Version Name = ${BuildConfig.VERSION_NAME}")
         }
     }
 }

@@ -23,8 +23,22 @@ android {
 
         buildConfigField("String", "baseUrl", "\"${Versions.getProperty(buildProp, "baseUrl")}\"")
     }
+    signingConfigs {
+        getByName("debug") {
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeFile = file(rootProject.file("debug.keystore"))
+            storePassword = "android"
+        }
+        create("release") {
 
+        }
+    }
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+            isDebuggable = true
+        }
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -73,6 +87,7 @@ dependencies {
     implementation(Libs.ACCOMPANIST_NAVIGATION_MATERIAL)
     implementation(Libs.ACCOMPANIST_DRAWABLE_PAINTER)
     implementation(Libs.ACCOMPANIST_SWIPE_TO_REFRESH)
+    implementation(Libs.ACCOMPANIST_WEBVIEW)
 
     // Compose
     implementation(Libs.COMPOSE_UI)
@@ -82,6 +97,7 @@ dependencies {
     implementation(Libs.NAVIGATION_COMPOSE)
     implementation(Libs.LIFECYCLE_VIEW_MODEL_COMPOSE)
     implementation(Libs.CONSTRAINT_LAYOUT_COMPOSE)
+    implementation(Libs.LOTTIE_COMPOSE)
     debugImplementation(Libs.COMPOSE_UI_TOOLING)
 
     // Android Architecture Components

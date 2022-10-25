@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
@@ -77,31 +78,31 @@ fun Tab1Screen(
 
 @Composable
 fun photoItem(item: Photo, onClick: () -> Unit) {
-    val backgroundColor = MaterialTheme.colors.background
+    val backgroundColor = Color.Black.copy(0.1f)
     val contentColor = contentColorFor(backgroundColor)
-    Box(
+    Card(
         modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
             .height(100.dp)
-            .background(backgroundColor)
-            .clickable {
-                onClick.invoke()
-            },
+            .clickable { onClick.invoke() },
     ) {
-        SubcomposeAsyncImage(
-            modifier = Modifier.size(100.dp),
-            model = item.thumbnailUrl,
-            loading = {
-                CircularProgressIndicator(modifier = Modifier.padding(25.dp))
-            },
-            contentDescription = "thumbnail"
-        )
-        Text(
-            modifier = Modifier
-                .padding(start = 100.dp)
-                .padding(10.dp),
-            text = item.title,
-            color = contentColor
-        )
+        Box(modifier = Modifier.fillMaxSize().background(backgroundColor)) {
+            SubcomposeAsyncImage(
+                modifier = Modifier.size(100.dp),
+                model = item.thumbnailUrl,
+                loading = {
+                    CircularProgressIndicator(modifier = Modifier.padding(25.dp))
+                },
+                contentDescription = "thumbnail"
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 100.dp)
+                    .padding(10.dp),
+                text = item.title,
+                color = contentColor
+            )
+        }
     }
 }
