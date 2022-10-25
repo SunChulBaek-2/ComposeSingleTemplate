@@ -12,6 +12,7 @@ val coreKtx = "1.8.0"
 val hilt = Versions.HILT_AGP
 val hiltNavigation = "1.0.0"
 val lifecycle = "2.5.1"
+val lottie = "5.2.0"
 val navigation = "2.5.2"
 val okhttp = "4.10.0"
 val retrofit = "2.9.0"
