@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  slack: circleci/slack@4.1
 jobs:
   build:
     working_directory: ~/ComposeTemplate
@@ -38,6 +40,14 @@ jobs:
       - run:
           name: Build Binaries
           command: ./gradlew assembleDebug;mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/ComposeTemplateM3-debug-${CIRCLE_BUILD_NUM}.apk
+      - slack/notify:
+          channel: C047ZRMCKFE
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          channel: C047ZRMCKFE
+          event: pass
+          template: basic_success_1
       - store_artifacts:
           path: app/build/outputs/apk/debug
           destination: apk
