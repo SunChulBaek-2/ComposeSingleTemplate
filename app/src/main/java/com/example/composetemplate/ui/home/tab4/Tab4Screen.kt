@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.BuildConfig
 import com.example.composetemplate.event.NavItemReselectEvent
+import com.example.composetemplate.ui.common.PText
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -49,11 +50,11 @@ fun Tab4Screen(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = { showSnackbar("$route 클릭") }
             ) {
-                Text(text = uiState.text,)
+                PText(text = uiState.text,)
             }
-            Text(text = "App ID : ${BuildConfig.APPLICATION_ID}")
-            Text(text = "Version Code = ${BuildConfig.VERSION_CODE}")
-            Text(text = "Version Name = ${BuildConfig.VERSION_NAME}")
+            PText(text = "App ID : ${BuildConfig.APPLICATION_ID}")
+            PText(text = "Version Code = ${BuildConfig.VERSION_CODE}")
+            PText(text = "Version Name = ${BuildConfig.VERSION_NAME}")
         }
     }
 }

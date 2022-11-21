@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.common.MyWebView
+import com.example.composetemplate.ui.common.PText
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -49,7 +50,7 @@ fun Tab2Screen(
                 navigate("webview/$encoded")
             }
         ) {
-            Text(
+            PText(
                 text = uiState.text,
             )
         }

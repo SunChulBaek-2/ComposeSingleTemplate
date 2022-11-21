@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.composetemplate.BuildConfig
 import com.example.composetemplate.R
 import com.example.composetemplate.event.NavItemReselectEvent
+import com.example.composetemplate.ui.common.PText
 import com.example.composetemplate.ui.home.tab1.Tab1Screen
 import com.example.composetemplate.ui.home.tab2.Tab2Screen
 import com.example.composetemplate.ui.home.tab3.Tab3Screen
@@ -131,7 +132,7 @@ fun BackCloseHandler(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar() = TopAppBar(
-    title = { Text(stringResource(R.string.app_name))},
+    title = { PText(stringResource(R.string.app_name))},
     navigationIcon = {
         IconButton(onClick = { }) {
             Icon(Icons.Default.Menu, "Menu")
@@ -152,7 +153,7 @@ fun MyBottomNavigation(navController: NavHostController, items: List<Screen>, on
                 } else {
                     screen.icon
                 }), null) },
-            label = { Text(stringResource(screen.resourceId)) },
+            label = { PText(stringResource(screen.resourceId)) },
             selected = selectedItem == index,
             onClick = {
                 selectedItem = index

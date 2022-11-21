@@ -18,18 +18,18 @@ fun SimpleDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = if (title != null) {
-            { Text(text = title) }
+            { PText(text = title) }
         } else null,
-        text = { Text(text = message) },
+        text = { PText(text = message) },
         confirmButton = {
             TextButton(onClick = onOkClick) {
-                Text(text = okText)
+                PText(text = okText)
             }
         },
         dismissButton = if (cancelText != null) {
             {
                 TextButton(onClick = onCancelClick) {
-                    Text(text = cancelText)
+                    PText(text = cancelText)
                 }
             }
         } else null

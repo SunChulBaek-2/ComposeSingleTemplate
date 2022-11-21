@@ -18,6 +18,7 @@ import com.example.composetemplate.data.model.Photo
 import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.common.ErrorScreen
 import com.example.composetemplate.ui.common.LoadingScreen
+import com.example.composetemplate.ui.common.PText
 import com.example.composetemplate.util.EventBus
 import com.google.accompanist.swiperefresh.SwipeRefresh
 
@@ -93,7 +94,7 @@ fun photoItem(item: Photo, onClick: () -> Unit) {
                 },
                 contentDescription = "thumbnail"
             )
-            Text(
+            PText(
                 modifier = Modifier
                     .padding(start = 100.dp)
                     .padding(10.dp),

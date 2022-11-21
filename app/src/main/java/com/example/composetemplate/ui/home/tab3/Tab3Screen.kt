@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composetemplate.event.NavItemReselectEvent
+import com.example.composetemplate.ui.common.PText
 import com.example.composetemplate.util.EventBus
 
 @Composable
@@ -47,7 +48,7 @@ fun Tab3Screen(
             modifier = Modifier.align(Alignment.Center),
             onClick = { showSnackbar("$route 클릭") }
         ) {
-            Text(
+            PText(
                 text = uiState.text,
             )
         }
