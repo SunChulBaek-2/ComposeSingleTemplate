@@ -3,8 +3,8 @@ plugins {
     id("maven-publish")
 }
 
-val accompanist = "0.25.1"
-val activityCompose = "1.6.0"
+val accompanist = "0.27.0"
+val activityCompose = "1.6.1"
 val coil = "2.2.2"
 val compose = Versions.COMPOSE
 val constraintLayoutCompose = "1.0.1"
