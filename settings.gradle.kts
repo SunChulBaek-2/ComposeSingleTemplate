@@ -5,7 +5,4 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include(
-    ":depconstraints",
-    ":app"
-)
+include(":app")

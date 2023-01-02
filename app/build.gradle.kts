@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -7,21 +10,21 @@ plugins {
 
 android {
     val buildProp = file(rootProject.file("build.properties"))
-    compileSdk = Versions.getProperty(buildProp, "compileSdk").toInt()
+    compileSdk = getProperty(buildProp, "compileSdk").toInt()
 
     defaultConfig {
-        applicationId = Versions.getProperty(buildProp, "applicationId")
-        minSdk = Versions.getProperty(buildProp, "minSdk").toInt()
-        targetSdk = Versions.getProperty(buildProp, "targetSdk").toInt()
-        versionCode = Versions.getProperty(buildProp, "versionCode").toInt()
-        versionName = Versions.getProperty(buildProp, "versionName")
+        applicationId = getProperty(buildProp, "applicationId")
+        minSdk = getProperty(buildProp, "minSdk").toInt()
+        targetSdk = getProperty(buildProp, "targetSdk").toInt()
+        versionCode = getProperty(buildProp, "versionCode").toInt()
+        versionName = getProperty(buildProp, "versionName")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
 
-        buildConfigField("String", "baseUrl", "\"${Versions.getProperty(buildProp, "baseUrl")}\"")
+        buildConfigField("String", "baseUrl", "\"${getProperty(buildProp, "baseUrl")}\"")
     }
     signingConfigs {
         getByName("debug") {
@@ -55,7 +58,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.COMPOSE_COMPILER
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
     packagingOptions {
         resources {
@@ -65,59 +68,64 @@ android {
 }
 
 dependencies {
-    api(platform(project(":depconstraints")))
-    kapt(platform(project(":depconstraints")))
-    androidTestApi(platform(project(":depconstraints")))
-
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE}")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.0")
 
     // accompanist
-    implementation(Libs.ACCOMPANIST_SYSTEM_UI_CONTROLLER)
-    implementation(Libs.ACCOMPANIST_APPCOMPAT_THEME)
-    implementation(Libs.ACCOMPANIST_PAGER)
-    implementation(Libs.ACCOMPANIST_PAGER_INDICATOR)
-    implementation(Libs.ACCOMPANIST_PERMISSIONS)
-    implementation(Libs.ACCOMPANIST_PLACEHOLDER_MATERIAL)
-    implementation(Libs.ACCOMPANIST_PLACEHOLDER)
-    implementation(Libs.ACCOMPANIST_FLOW_LAYOUT)
-    implementation(Libs.ACCOMPANIST_NAVIGATION_ANIMATION)
-    implementation(Libs.ACCOMPANIST_NAVIGATION_MATERIAL)
-    implementation(Libs.ACCOMPANIST_DRAWABLE_PAINTER)
-    implementation(Libs.ACCOMPANIST_SWIPE_TO_REFRESH)
-    implementation(Libs.ACCOMPANIST_WEBVIEW)
+    implementation(libs.accompanist.appcompat.theme)
+    implementation(libs.accompanist.drawablepainter)
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.navigation.material)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicator)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.accompanist.placeholder.material)
+    implementation(libs.accompanist.placeholder)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.swiperefresh)
+    implementation(libs.accompanist.webview)
 
     // Compose
-    implementation(Libs.COMPOSE_UI)
-    implementation(Libs.COMPOSE_MATERIAL)
-    implementation(Libs.COMPOSE_MATERIAL3)
-    implementation(Libs.COMPOSE_UI_TOOLING_PREVIEW)
-    implementation(Libs.ACTIVITY_COMPOSE)
-    implementation(Libs.NAVIGATION_COMPOSE)
-    implementation(Libs.LIFECYCLE_VIEW_MODEL_COMPOSE)
-    implementation(Libs.CONSTRAINT_LAYOUT_COMPOSE)
-    implementation(Libs.LOTTIE_COMPOSE)
-    debugImplementation(Libs.COMPOSE_UI_TOOLING)
+    implementation(libs.androidx.compose.bom)
+    //implementation(libs.androidx.compose.ui)
+    //implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+
+    // TODO : Android Studio Preview support (Build fix)
+//    implementation(libs.androidx.compose.ui.tooling.preview)
+//    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Optional - Integration with activities
+    implementation(libs.androidx.activity.compose)
+    // Optional - Integration with ViewModels
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.constraint.layout.compose)
+    implementation(libs.lottie.compose)
 
     // Android Architecture Components
-    implementation(Libs.LIFECYCLE_RUNTIME_KTX)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Retrofit
-    implementation(Libs.RETROFIT)
-    implementation(Libs.RETROFIT_GSON_CONVERTER)
-    implementation(Libs.OKHTTP_LOGGING_INTERCEPTOR)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson.converter)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Coil
-    implementation(Libs.COIL)
-    implementation(Libs.COIL_COMPOSE)
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
 
     // Timber
-    implementation(Libs.TIMBER)
+    implementation(libs.timber)
 
     // Hilt
-    implementation(Libs.HILT_ANDROID)
-    kapt(Libs.HILT_COMPILER)
-    implementation(Libs.HILT_NAVIGATION)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
 }
+
+fun getProperty(file: File, key: String): String = Properties().apply { load(FileInputStream(file)) }.getProperty(key)
