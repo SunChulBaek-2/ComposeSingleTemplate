@@ -73,6 +73,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.0")
 
+    implementation(libs.androidx.core.splashscreen)
+
     // accompanist
     implementation(libs.accompanist.appcompat.theme)
     implementation(libs.accompanist.drawablepainter)
