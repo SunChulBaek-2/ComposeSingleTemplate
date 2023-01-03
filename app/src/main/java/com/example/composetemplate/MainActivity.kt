@@ -7,13 +7,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
 import androidx.compose.runtime.Composable
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.composetemplate.ui.common.MyWebView
 import com.example.composetemplate.ui.detail.PhotoDetailScreen
 import com.example.composetemplate.ui.home.HomeScreen
-import com.example.composetemplate.ui.splash.SplashScreen
 import com.example.composetemplate.ui.theme.ComposeTemplateTheme
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.accompanist.navigation.animation.composable
@@ -24,6 +24,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         setContent {
             ComposeTemplateTheme {
@@ -57,16 +58,8 @@ fun MainNavHost(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = "splash"
+        startDestination = "home"
     ) {
-        // 스플래시
-        composable("splash") {
-            SplashScreen {
-                navController.navigate("home") {
-                    popUpTo(0)
-                }
-            }
-        }
         // 홈
         composable("home") {
             HomeScreen(
