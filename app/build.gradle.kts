@@ -2,19 +2,16 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("kr.pe.ssun.application")
+    id("kr.pe.ssun.application.compose")
+    id("kr.pe.ssun.hilt")
 }
 
 android {
     val buildProp = file(rootProject.file("build.properties"))
-    compileSdk = getProperty(buildProp, "compileSdk").toInt()
 
     defaultConfig {
         applicationId = getProperty(buildProp, "applicationId")
-        minSdk = getProperty(buildProp, "minSdk").toInt()
         targetSdk = getProperty(buildProp, "targetSdk").toInt()
         versionCode = getProperty(buildProp, "versionCode").toInt()
         versionName = getProperty(buildProp, "versionName")
@@ -47,13 +44,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         compose = true
     }
@@ -64,6 +54,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    // TODO : build fix (https://dagger.dev/hilt/gradle-setup.html)
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -91,10 +85,6 @@ dependencies {
     implementation(libs.accompanist.webview)
 
     // Compose
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
-    androidTestImplementation(composeBom)
-
     // Choose one of the following:
     // Material Design 3
     implementation(libs.androidx.compose.material3)
@@ -134,6 +124,7 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.constraint.layout.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.lottie.compose)
 
     // Android Architecture Components
@@ -150,11 +141,6 @@ dependencies {
 
     // Timber
     implementation(libs.timber)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 }
 
 fun getProperty(file: File, key: String): String = Properties().apply { load(FileInputStream(file)) }.getProperty(key)
