@@ -12,7 +12,6 @@ android {
 
     defaultConfig {
         applicationId = getProperty(buildProp, "applicationId")
-        targetSdk = getProperty(buildProp, "targetSdk").toInt()
         versionCode = getProperty(buildProp, "versionCode").toInt()
         versionName = getProperty(buildProp, "versionName")
 
