@@ -8,19 +8,11 @@ plugins {
 }
 
 android {
-    val buildProp = file(rootProject.file("build.properties"))
-
     defaultConfig {
-        applicationId = getProperty(buildProp, "applicationId")
-        versionCode = getProperty(buildProp, "versionCode").toInt()
-        versionName = getProperty(buildProp, "versionName")
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "baseUrl", "\"${getProperty(buildProp, "baseUrl")}\"")
     }
     signingConfigs {
         getByName("debug") {

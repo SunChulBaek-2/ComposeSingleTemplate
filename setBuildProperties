@@ -8,4 +8,3 @@ echo minSdk=21 >> $BUILD_PROPERTIES
 echo targetSdk=33 >> $BUILD_PROPERTIES
 echo versionCode=$VERSION_CODE >> $BUILD_PROPERTIES
 echo versionName=$VERSION_NAME >> $BUILD_PROPERTIES
-echo baseUrl=https://jsonplaceholder.typicode.com >> $BUILD_PROPERTIES

@@ -45,7 +45,7 @@ object ApiModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         Timber.d("provideRetrofit")
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.baseUrl)
+            .baseUrl("https://jsonplaceholder.typicode.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
