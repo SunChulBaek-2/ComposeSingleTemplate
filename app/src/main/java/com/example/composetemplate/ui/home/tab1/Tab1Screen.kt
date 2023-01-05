@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -20,8 +21,8 @@ import com.example.composetemplate.event.NavItemReselectEvent
 import com.example.composetemplate.ui.common.ErrorScreen
 import com.example.composetemplate.ui.common.LoadingScreen
 import com.example.composetemplate.util.EventBus
-import com.google.accompanist.swiperefresh.SwipeRefresh
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun Tab1Screen(
     route: String,
@@ -54,10 +55,12 @@ fun Tab1Screen(
         } else if (uiState.isError) {
             ErrorScreen()
         } else {
-            SwipeRefresh(
-                state = uiState.swipeRefreshState,
-                onRefresh = { viewModel.init(forced = true) }
-            ) {
+            val refreshing by remember { mutableStateOf(false) }
+            val pullRefreshState = rememberPullRefreshState(
+                refreshing = refreshing,
+                onRefresh = { viewModel.init(forced = true) })
+
+            Box(Modifier.pullRefresh(pullRefreshState)) {
                 LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
                     items(
                         count = uiState.photos.size,
@@ -71,6 +74,7 @@ fun Tab1Screen(
                         }
                     )
                 }
+                PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
             }
         }
     }

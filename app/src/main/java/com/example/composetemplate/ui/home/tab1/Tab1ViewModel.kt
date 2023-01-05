@@ -8,7 +8,6 @@ import com.example.composetemplate.data.model.Photo
 import com.example.composetemplate.domain.GetPhotosParam
 import com.example.composetemplate.domain.GetPhotosUseCase
 import com.example.composetemplate.util.onMain
-import com.google.accompanist.swiperefresh.SwipeRefreshState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,7 +16,6 @@ data class Tab1UiState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val photos: List<Photo> = listOf(),
-    val swipeRefreshState: SwipeRefreshState = SwipeRefreshState(isLoading)
 )
 
 @HiltViewModel
