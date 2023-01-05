@@ -36,10 +36,10 @@ jobs:
           command: ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=plain
       - run:
           name: Set Build Properties
-          command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM "1.0.0"
+          command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM "1.0.0" "androiddebugkey" "android" "debug.keystore" "android"
       - run:
           name: Build Binaries
-          command: ./gradlew assembleDebug;mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/ComposeTemplateM3-debug-${CIRCLE_BUILD_NUM}.apk
+          command: ./gradlew assembleRelease;mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/ComposeTemplateM3-release-${CIRCLE_BUILD_NUM}.apk
       - slack/notify:
           channel: $SLACK_ACCESS_TOKEN_M3
           event: fail
@@ -49,5 +49,5 @@ jobs:
           event: pass
           template: basic_success_1
       - store_artifacts:
-          path: app/build/outputs/apk/debug
+          path: app/build/outputs/apk/release
           destination: apk

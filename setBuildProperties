@@ -1,5 +1,10 @@
 VERSION_CODE=${1}
 VERSION_NAME=${2}
+KEY_ALIAS=${3}
+KEY_PASSWORD=${4}
+STORE_FILE=${5}
+STORE_PASSWORD=${6}
+
 BUILD_PROPERTIES=build.properties
 
 echo applicationId=com.example.composetemplate > $BUILD_PROPERTIES
@@ -8,3 +13,7 @@ echo minSdk=21 >> $BUILD_PROPERTIES
 echo targetSdk=33 >> $BUILD_PROPERTIES
 echo versionCode=$VERSION_CODE >> $BUILD_PROPERTIES
 echo versionName=$VERSION_NAME >> $BUILD_PROPERTIES
+echo keyAlias=$KEY_ALIAS >>
+echo keyPassword=$KEY_PASSWORD >> $BUILD_PROPERTIES
+echo storeFile=$STORE_FILE >> $BUILD_PROPERTIES
+echo storePassword=$STORE_PASSWORD >> $BUILD_PROPERTIES
