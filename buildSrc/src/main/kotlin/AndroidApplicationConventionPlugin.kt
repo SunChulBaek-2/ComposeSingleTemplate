@@ -20,7 +20,10 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 val properties = Properties().apply { load(FileInputStream(propFile))}
 
                 configureKotlinAndroid(this)
+                defaultConfig.applicationId = properties.getProperty("applicationId")
                 defaultConfig.targetSdk = properties.getProperty("targetSdk").toInt()
+                defaultConfig.versionCode = properties.getProperty("versionCode").toInt()
+                defaultConfig.versionName = properties.getProperty("versionName")
                 //configureFlavors(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
