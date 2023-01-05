@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 plugins {
     id("kr.pe.ssun.application")
     id("kr.pe.ssun.application.compose")
@@ -130,5 +127,3 @@ dependencies {
     // Timber
     implementation(libs.timber)
 }
-
-fun getProperty(file: File, key: String): String = Properties().apply { load(FileInputStream(file)) }.getProperty(key)
