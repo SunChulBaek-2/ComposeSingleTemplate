@@ -16,7 +16,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                val propFile = file(rootProject.file("build.properties"))
+                val propFile = rootProject.file("build.properties")
                 val properties = Properties().apply { load(FileInputStream(propFile))}
 
                 configureKotlinAndroid(this)
@@ -32,7 +32,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     getByName("debug") {
                         keyAlias = "androiddebugkey"
                         keyPassword = "android"
-                        storeFile = file(rootProject.file("debug.keystore"))
+                        storeFile = rootProject.file("debug.keystore")
                         storePassword = "android"
                     }
                     create("release") {
@@ -40,7 +40,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                         if (path != null) {
                             keyAlias = properties.getProperty("keyAlias")
                             keyPassword = properties.getProperty("keyPassword")
-                            storeFile = file(rootProject.file(path))
+                            storeFile = rootProject.file(path)
                             storePassword = properties.getProperty("storePassword")
                         }
                     }
