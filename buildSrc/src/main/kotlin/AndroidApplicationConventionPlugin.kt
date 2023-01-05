@@ -4,6 +4,8 @@ import kr.pe.ssun.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import java.io.FileInputStream
+import java.util.*
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -14,8 +16,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
+                val propFile = file(rootProject.file("build.properties"))
+                val properties = Properties().apply { load(FileInputStream(propFile))}
+
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 33
+                defaultConfig.targetSdk = properties.getProperty("targetSdk").toInt()
                 //configureFlavors(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
