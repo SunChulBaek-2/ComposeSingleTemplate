@@ -24,6 +24,36 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = properties.getProperty("targetSdk").toInt()
                 defaultConfig.versionCode = properties.getProperty("versionCode").toInt()
                 defaultConfig.versionName = properties.getProperty("versionName")
+
+                signingConfigs {
+                    getByName("debug") {
+                        keyAlias = "androiddebugkey"
+                        keyPassword = "android"
+                        storeFile = file(rootProject.file("debug.keystore"))
+                        storePassword = "android"
+                    }
+                    create("release") {
+                        val path = properties.getProperty("storeFile")
+                        if (path != null) {
+                            keyAlias = properties.getProperty("keyAlias")
+                            keyPassword = properties.getProperty("keyPassword")
+                            storeFile = file(rootProject.file(path))
+                            storePassword = properties.getProperty("storePassword")
+                        }
+                    }
+                }
+
+                buildTypes {
+                    getByName("debug") {
+                        signingConfig = signingConfigs.getByName("debug")
+                        isDebuggable = true
+                    }
+                    getByName("release") {
+                        signingConfig = signingConfigs.getByName("release")
+                        isMinifyEnabled = false
+                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                    }
+                }
                 //configureFlavors(this)
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
