@@ -20,10 +20,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 val properties = Properties().apply { load(FileInputStream(propFile))}
 
                 configureKotlinAndroid(this)
-                defaultConfig.applicationId = properties.getProperty("applicationId")
-                defaultConfig.targetSdk = properties.getProperty("targetSdk").toInt()
-                defaultConfig.versionCode = properties.getProperty("versionCode").toInt()
-                defaultConfig.versionName = properties.getProperty("versionName")
+
+                defaultConfig {
+                    applicationId = properties.getProperty("applicationId")
+                    targetSdk = properties.getProperty("targetSdk").toInt()
+                    versionCode = properties.getProperty("versionCode").toInt()
+                    versionName = properties.getProperty("versionName")
+                }
 
                 signingConfigs {
                     getByName("debug") {
