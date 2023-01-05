@@ -17,7 +17,7 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *>,
 ) {
     commonExtension.apply {
-        val propFile = file(rootProject.file("build.properties"))
+        val propFile = rootProject.file("build.properties")
         val properties = Properties().apply { load(FileInputStream(propFile))}
 
         compileSdk = properties.getProperty("compileSdk").toInt()
