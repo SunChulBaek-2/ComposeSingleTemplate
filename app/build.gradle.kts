@@ -90,6 +90,8 @@ dependencies {
     // Android Architecture Components
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    implementation(libs.androidx.startup)
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson.converter)
