@@ -3,9 +3,9 @@ orbs:
   slack: circleci/slack@4.10.1
 jobs:
   build:
-    working_directory: ~/ComposeTemplate
+    working_directory: ~/ComposeSingleTemplate
     docker:
-      - image: cimg/android:2022.09
+      - image: cimg/android:2022.12
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
