@@ -39,7 +39,7 @@ jobs:
           command: sudo chmod +x ./setBuildProperties; ./setBuildProperties $CIRCLE_BUILD_NUM "1.0.0"  "androiddebugkey" "android" "debug.keystore" "android"
       - run:
           name: Build Binaries
-          command: ./gradlew assembleRelease;mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/ComposeTemplateM2-release-${CIRCLE_BUILD_NUM}.apk
+          command: ./gradlew assembleRelease;mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/CSTemplateM2-release-${CIRCLE_BUILD_NUM}.apk
       - slack/notify:
           channel: $SLACK_ACCESS_TOKEN_M2
           event: fail
